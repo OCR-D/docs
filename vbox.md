@@ -73,8 +73,15 @@ virtualenv -p python3.6 venv3
 virtualenv -p python2.7 venv2
 ```
 
-#### core
+### Bootstrap ocrd
 
 ```sh
-source $HOME/venv2
+# Clone the repo
+git clone https://github.com/kba/ocrd-docs build/ocrd-docs
+
+# Setup makefile
+ln -sr build/ocrd-docs/vbox/Makefile
+
+# Clone repos
+make clone
 ```
