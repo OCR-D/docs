@@ -22,11 +22,11 @@ Password: **`ocrd`**
 
 ```sh
 # Install packages
-sudo apt install git curl vim make zsh htop xclip apt-file silversearcher-ag clipit terminator
+sudo apt install git curl vim-gtk3 make zsh htop xclip apt-file silversearcher-ag clipit terminator
 
 # Remove cruft
 rm -rf $HOME/{Music,Pictures,Public,Templates,Videos}
-sudo apt remove libreoffice-{core,writer,calc} thundrbird pidgin-data libflite1
+sudo apt remove libreoffice-{core,writer,calc} thunderbird pidgin-data libflite1
 
 # Upgrade
 sudo apt update
@@ -64,7 +64,7 @@ sudo apt install libtesseract{4,-dev} tesseract-ocr{,-eng,-deu}
 
 ### Python
 
-#### virtualenv
+#### Install virtualenv
 
 ```sh
 sudo apt install python3-virtualenv python-virtualenv
@@ -72,6 +72,14 @@ cd $HOME
 virtualenv -p python3.6 venv3
 virtualenv -p python2.7 venv2
 ```
+
+#### Default to venv3
+
+```sh
+echo "source $HOME/venv3/bin/activate" > ~/.zshrc.local
+```
+
+**NOTE** Use `source $HOME/venv2/bin/activate` to use Python2. Only for ocrd_ocropy.
 
 ### Bootstrap ocrd
 
@@ -84,4 +92,7 @@ ln -sr build/ocrd-docs/vbox/Makefile
 
 # Clone repos
 make clone
+
+# Install 'em
+make install
 ```
