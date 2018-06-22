@@ -28,6 +28,8 @@
 	* [Load an existing METS and referenced files as a workspace](#load-an-existing-mets-and-referenced-files-as-a-workspace)
 	* [Searching the files in a METS](#searching-the-files-in-a-mets)
 	* [Downloading/Copying files to the workspace](#downloadingcopying-files-to-the-workspace)
+	* [Adding files to the workspace](#adding-files-to-the-workspace)
+	* [Validating OCR-D compliant METS](#validating-ocr-d-compliant-mets)
 * [From image to transcription](#from-image-to-transcription)
 	* [OCR-D workflow](#ocr-d-workflow)
 	* [KRAKEN, OLENA, TESSEROCR, OCROPY](#kraken-olena-tesserocr-ocropy)
@@ -42,6 +44,7 @@
 		* [Getting files referenced inside METS](#getting-files-referenced-inside-mets-1)
 * [FAQ](#faq)
 	* [How do I get help on specific CLI commands?](#how-do-i-get-help-on-specific-cli-commands)
+	* [How do I turn off logging](#how-do-i-turn-off-logging)
 
 <!-- END-MARKDOWN-TOC -->
 
@@ -357,7 +360,7 @@ command](#searching-the-files-in-a-mets):
 
 ```sh
 # Clone Bare workspace:
-$ ocrd workspace clone $WORKSPACE_DIR
+$ ocrd workspace clone $METS_URL
 
 $ find $WORKSPACE_DIR
 $WORKSPACE_DIR
@@ -372,6 +375,65 @@ $WORKSPACE_DIR
 $WORKSPACE_DIR/mets.xml
 $WORKSPACE_DIR/OCR-D-IMG
 $WORKSPACE_DIR/OCR-D-IMG/kant_aufklaerung_1784_0020.tif
+```
+
+The convention is that files will be downloaded to `$WORKSPACE_DIR/$FILE_GROUP/$BASENAME` where
+
+  * `$FILE_GROUP` is the `@USE` attribute of the `mets:fileGrp`
+  * `$BASENAME` is the last URL segment of the `@xlink:href` attribute of the `mets:FLocat`
+
+**NOTE** Downloading a file not only copies the file to the `$WORKSPACE_DIR`
+but also changes the URL of the file from its original to the absolute file
+path of the downloaded file.
+
+### Adding files to the workspace
+
+When running a module project, new files are created (PAGE XML, images ...). To
+register these new files, they need to be added to the `mets.xml` as a
+`mets:file` with a `mets:FLocat` within a `mets:fileGrp`, each with the right
+attributes. The `workspace add` command makes this possible:
+
+
+```sh
+$ ocrd workspace -d $WORKSPACE_DIR find -k local_filename
+$WORKSPACE_DIR/OCR-D-IMG/page0013.tif
+
+$ ocrd workspace -d $WORKSPACE_DIR add \
+  --file-grp OCR-D-IMG-BIN \
+  --file-id PAGE-0013-BIN \
+  --mimetype image/png \
+  --group-id PAGE-0013 \
+  page0013binarized.png
+
+$ ocrd workspace -d $WORKSPACE_DIR find -k local_filename
+$WORKSPACE_DIR/OCR-D-IMG/page0013.tif
+$WORKSPACE_DIR/OCR-D-IMG-BIN/page0013binarized.tif
+```
+
+### Validating OCR-D compliant METS
+
+To ensure a METS file and the workspace it describes adheres to the [OCR-D
+specs](https://ocr-d.github.io/mets), use the `workspace validate` command:
+
+```sh
+# Create a bare workspace
+ocrd workspace init $WORKSPACE_DIR
+
+# Validate
+<report valid="false">
+  <error>METS has no unique identifier</error>
+  <error>No files</error>
+</report>
+
+# Oops, let's set the identifier ...
+$ ocrd workspace -d $WORKSPACE_DIR set-id 'scheme://my/identifier/syntax/kant_aufklaerung_1784'
+
+# ... and add a file
+$ ocrd workspace -d $WORKSPACE_DIR add -G OCR-D-IMG-BIN -i PAGE-0013-BIN -m image/png -g PAGE-0013
+
+# Validate again
+<report valid="true">
+</report>
 ```
 
 ## From image to transcription
@@ -696,3 +758,7 @@ ocrd --help
 ocrd workspace --help
 ocrd workspace add --help
 ```
+
+### How do I turn off logging
+
+:rotating_light: TODO
