@@ -231,13 +231,13 @@ The workflow may be divided in the following steps:
 
 ### KRAKEN, OLENA, TESSEROCR, OCROPY
 
-```shell=
+```sh
 # Step 0: Check/Install git and dependencies
 ```
 
 See subsection [Bootstrapping](#bootstrapping)
 
-```shell=
+```sh
 # Step 1: Clone repositories
 # Step 1a: KRAKEN
 $ cd ~/projects/OCR-D
@@ -254,7 +254,7 @@ Version 0.0.1, ocrd/core 0.4.0
 
 ### Binarize one image without existing METS file.
 
-```shell=
+```sh
 # Step 0: Create Workspace & METS file
 # ------------------------
 # Step 0a: Create directory for workshop
@@ -308,13 +308,13 @@ file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/cloneEmptyWorksp
 
 See subsection [Bootstrapping](#bootstrapping)
 
-```shell=
+```sh
 # Step 4a: Install KRAKEN see [Installation KRAKEN] (#KRAKEN, OLENA, TESSEROCR, OCROPY)
 ```
 
 See subsection [Install KRAKEN](#KRAKEN-OLENA-TESSEROCR-OCROPY)
 
-```shell=
+```sh
 # Step 4b: List all available tools
 $ ocrd ocrd-tool   ~/projects/OCR-D/ocrd_kraken/ocrd-tool.json list-tools
   ocrd-kraken-binarize
@@ -339,7 +339,7 @@ $ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeEmptyWorkspace
 ### Binarize all images of a METS file.
 
 
-```shell=
+```sh
 # Step 0: Create Workspace & METS file
 # ------------------------
 # Step 0a: Create workspace including METS file
@@ -400,7 +400,7 @@ $ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-
 
 For preparing workspace see subsection [Binarize all images of a METS file](#binarize-all-images-of-a-mets-file) (Step 0 - 3)
 
-```shell=
+```sh
 # Step 0: Reuse existing workspace
 # --------------------------------
 $ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/multipleImages
@@ -437,7 +437,7 @@ $ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeSelectedImage/
 
 ### Get Ground Truth from OCR-D
 
-```shell=
+```sh
 # Create data directory
 $ mkdir -p ~/projects/OCR-D/data/groundTruth
 $ cd ~/projects/OCR-D/data/groundTruth
@@ -467,7 +467,7 @@ $ sudo make install
 
 The command 'ocrd workspace find' supports several options.
 
-```shell=
+```sh
 $ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages
 # List all files.
 $ ocrd workspace find
@@ -490,7 +490,7 @@ file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImage
 
 The command 'ocrd workspace find' supports several options.
 
-```shell=
+```sh
 $ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages
 # List all files.
 $ ocrd workspace find
