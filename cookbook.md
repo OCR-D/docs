@@ -186,7 +186,7 @@ it's only used for its CLI (and as a depencency for Python-based OCR-D
 software), you can install it system-wide:
 
 ```sh
-$ pip install ocrd
+$ sudo pip install ocrd
 ```
 
 ### Setup from source
@@ -319,7 +319,7 @@ new-workspace/mets.xml
 
 ### Load an existing METS and referenced files as a workspace
 
-To not only [clone the METS](load-an-existing-mets-as-a-workspace) but also
+To not only [clone the METS](#load-an-existing-mets-as-a-workspace) but also
 download the contained files, use `workspace clone` with the `--download` flag:
 
 ```sh
@@ -429,7 +429,7 @@ ocrd workspace init $WORKSPACE_DIR
 $ ocrd workspace -d $WORKSPACE_DIR set-id 'scheme://my/identifier/syntax/kant_aufklaerung_1784'
 
 # ... and add a file
-$ ocrd workspace -d $WORKSPACE_DIR add -G OCR-D-IMG-BIN -i PAGE-0013-BIN -m image/png -g PAGE-0013
+$ ocrd workspace -d $WORKSPACE_DIR add -G OCR-D-IMG-BIN -i PAGE-0013-BIN -m image/png -g PAGE-0013 page0013binarized.png
 
 # Validate again
 <report valid="true">
