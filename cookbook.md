@@ -17,6 +17,11 @@
 	* [Generic setup](#generic-setup)
 	* [Setup from source](#setup-from-source)
 	* [Verify setup](#verify-setup)
+* [Working with METS](#working-with-mets)
+	* [Workspace](#workspace)
+	* [Creating an empty workspace](#creating-an-empty-workspace)
+	* [Load an existing METS as a workspace](#load-an-existing-mets-as-a-workspace)
+	* [Load an existing METS and referenced files as a workspace](#load-an-existing-mets-and-referenced-files-as-a-workspace)
 * [From image to transcription](#from-image-to-transcription)
 	* [OCR-D workflow](#ocr-d-workflow)
 	* [KRAKEN, OLENA, TESSEROCR, OCROPY](#kraken-olena-tesserocr-ocropy)
@@ -24,12 +29,13 @@
 	* [Binarize one image without existing METS file.](#binarize-one-image-without-existing-mets-file)
 	* [Binarize all images of a METS file.](#binarize-all-images-of-a-mets-file)
 	* [Binarize one image of a METS file.](#binarize-one-image-of-a-mets-file)
-	* [Get Ground Truth from OCR-D ](#get-ground-truth-from-ocr-d-)
+	* [Get Ground Truth from OCR-D](#get-ground-truth-from-ocr-d)
 	* [Installing a MP executable](#installing-a-mp-executable)
 	* [Tools for MP](#tools-for-mp)
 		* [Getting files referenced inside METS](#getting-files-referenced-inside-mets)
 		* [Getting files referenced inside METS](#getting-files-referenced-inside-mets-1)
 * [FAQ](#faq)
+	* [How do I get help on specific CLI commands?](#how-do-i-get-help-on-specific-cli-commands)
 	* [Question: After fixing error 'ocrd workspace validate' will still fail](#question-after-fixing-error--ocrd-workspace-validate--will-still-fail)
 * [Links](#links)
 
@@ -196,6 +202,74 @@ make --version
 $ ocrd --version
 # ocrd, version 0.4.0
 ```
+
+## Working with METS
+
+METS is the container format of choice for OCR-D because it is widely used in
+digitzation workflows in cultural heritage institutions.
+
+A METS file references files in file groups and can contain a variety of
+metadata, the details can [be found in the specs](https://ocr-d.github.io).
+
+### Workspace
+
+Within the OCR-D toolkit, we use the term "workspace", a folder containing a
+file `mets.xml` and any number of the files referenced by the METS.
+
+One can think of the `mets.xml` as the MANIFEST of a JAR or the `.git` folder
+of a git repository.
+
+The `workspace` command of the `ocrd` tool allows various manipulations of
+workspaces and therefore METS files.
+
+It's syntax and mechanics are strongly inspired by [`git`]() so if you know
+`git`, this should be familiar.
+
+### Creating an empty workspace
+
+To create an empty workspace for you to add files to, use the `workspace init` command
+
+```sh
+$ ocrd workspace init ws1
+> /home/ocr/ws1
+```
+
+### Load an existing METS as a workspace
+
+To create a workspace and save a METS file, use the `workspace clone` command:
+
+```sh
+$ ocrd workspace clone https://github.com/OCR-D/assets/raw/master/data/kant_aufklaerung_1784/mets.xml new-workspace
+/home/ocr/new-workspace
+
+$ find new-workspace
+new-workspace
+new-workspace/mets.xml
+```
+
+### Load an existing METS and referenced files as a workspace
+
+To not only [clone the METS](load-an-existing-mets-as-a-workspace) but also
+download the contained files, use `workspace clone` with the `--download` flag:
+
+```sh
+$ ocrd workspace clone --download https://github.com/OCR-D/assets/raw/master/data/kant_aufklaerung_1784/mets.xml new-workspace
+/home/ocr/new-workspace
+
+$ find new-workspace
+new-workspace
+new-workspace/mets.xml
+new-workspace/OCR-D-GT-ALTO
+new-workspace/OCR-D-GT-ALTO/kant_aufklaerung_1784_0020.xml
+new-workspace/OCR-D-GT-PAGE
+new-workspace/OCR-D-GT-PAGE/kant_aufklaerung_1784_0020.xml
+new-workspace/OCR-D-IMG
+new-workspace/OCR-D-IMG/kant_aufklaerung_1784_0020.tif
+```
+
+**NOTE**: This will download **all** files, which can mean hundreds of
+high-resolution images. If you want more fine-grained control, [use the
+`workspace find` command with the `download` flag](TODO)
 
 ## From image to transcription
 
@@ -509,6 +583,16 @@ file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImage
 ```
 
 ## FAQ
+
+### How do I get help on specific CLI commands?
+
+Every command and subcommand supports the `--help` option to print a description, arguments and options:
+
+```sh
+ocrd --help
+ocrd workspace --help
+ocrd workspace add --help
+```
 
 ### Question: After fixing error 'ocrd workspace validate' will still fail
 
