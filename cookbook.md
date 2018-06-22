@@ -247,7 +247,7 @@ $ make deps-pip
 $ make install
 # Step 1b: Test installation
 $ ocrd-kraken-binarize --version
-Version 0.0.1, ocrd/core 0.3.1
+Version 0.0.1, ocrd/core 0.4.0
 ```
 
 ## Workflows
@@ -255,23 +255,28 @@ Version 0.0.1, ocrd/core 0.3.1
 ### Binarize one image without existing METS file.
 
 ```shell=
-# Step 0: Create Workspace & METS file 
+# Step 0: Create Workspace & METS file
 # ------------------------
-# Step 0a: Create workspace including METS file in subdir `./ws1`
-$ ocrd workspace -d ws1 create
+# Step 0a: Create directory for workshop
+$ mkdir -p ~/projects/OCR-D/workshop/2018_06_26/workspaces
+$ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces
+# Step 0b: Create workspace including METS file in subdir `./emptyWorkspace`
+$ ocrd workspace -d emptyWorkspace create
+$ cd emptyWorkspace
+$ ocrd workspace validate
 $ cd ws1  
-# Step 0b: Validate workspace
-$ ocrd workspace validate 
+# Step 0c: Validate workspace
 <report valid="false">
   <error>METS has no unique identifier</error>
   <error>No files</error>
 </report>
-# Step 0c: Add identifier to METS file
+# Step 0d: Add identifier to METS file
 $ ocrd workspace set-id 'http://resolver.staatsbibliothek-berlin.de/SBB0000F29300000000'
 $ ocrd workspace validate
 <report valid="false">
   <error>No files</error>
 </report>
+
 # Step 1: Download tiff image
 # ---------------------------
 $ wget -O PPN767137728_00000005.tif "http://ngcs.staatsbibliothek-berlin.de/?action=metsImage&format=tif&metsFile=PPN767137728&divID=PHYS_0005&original=true"
@@ -279,23 +284,23 @@ $ wget -O PPN767137728_00000005.tif "http://ngcs.staatsbibliothek-berlin.de/?act
 
 # Step 2: Add image to METS
 # -------------------------
-# Be aware, that the ID and the GROUPID have to identical if the referenced image represents the original image 
+# Be aware, that the ID and the GROUPID have to identical if the referenced image represents the original image
 $ ocrd workspace add --file-grp OCR-D-IMG --file-id OCR-D-IMG_0001 --group-id OCR-D-IMG_0001 --mimetype image/tiff PPN767137728_00000005.tif
 
 # Step 3: Validate workspace
 # --------------------------
-$ ocrd workspace validate 
+$ ocrd workspace validate
 <report valid="true">
 </report>
 
 # Step 3a: Clone workspace (optional)
 # -----------------------------------
 # Create new directory and clone workspace to this directory
-$ mkdir ../workspace2; cd ../workspace2
-$ ocrd workspace clone --download-all $OLDPWD/mets.xml 
+$ ocrd workspace clone --download mets.xml ../cloneEmptyWorkspace
+$ cd ../cloneEmptyWorkspace
 # Show all files (use --help to see all parameters)
 $ ocrd workspace find
-file:///path/to/new/workspace/OCR-D-IMG/PPN767137728_00000005.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/cloneEmptyWorkspace/PPN767137728_00000005.tif
 
 # Step 4: Execute binarization of image
 # -------------------------------------
@@ -317,17 +322,17 @@ $ ocrd ocrd-tool   ~/projects/OCR-D/ocrd_kraken/ocrd-tool.json list-tools
   ocrd-kraken-segment
 # Step 4c: List attributes of 'ocrd-kraken-binarize'
 $ ocrd ocrd-tool   ~/projects/OCR-D/ocrd_kraken/ocrd-tool.json tool ocrd-kraken-binarize description
-  Binarize images with kraken
 $ ocrd ocrd-tool   ~/projects/OCR-D/ocrd_kraken/ocrd-tool.json tool ocrd-kraken-binarize categories
+Binarize images with kraken
   Image preprocessing
 $ ocrd ocrd-tool   ~/projects/OCR-D/ocrd_kraken/ocrd-tool.json tool ocrd-kraken-binarize steps
   preprocessing/optimization/binarization
-  
+
 # Step 4d: Binarize Image with KRAKEN
 # Binarize all images inside fileGrp 'OCR-D-IMG'
-$ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KRAKEN-BIN --group-id OCR-D-IMG_0001 --working-dir ~/projects/OCR-D/data/workshop/binarizeOneImage --mets /path/to/new/workspace/mets.xml 
+$ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KRAKEN-BIN --group-id OCR-D-IMG_0001 --working-dir ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeEmptyWorkspace --mets mets.xml
 # Check result
-$ firefox ~/projects/OCR-D/data/workshop/binarizeOneImage/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
+$ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeEmptyWorkspace/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
 # That's it
 ```
 
@@ -335,13 +340,13 @@ $ firefox ~/projects/OCR-D/data/workshop/binarizeOneImage/OCR-D-IMG-KRAKEN-BIN/O
 
 
 ```shell=
-# Step 0: Create Workspace & METS file 
+# Step 0: Create Workspace & METS file
 # ------------------------
 # Step 0a: Create workspace including METS file
-$ ocrd workspace -d ~/projects/OCR-D/data/workshop/multipleImages create
-$ cd ~/projects/OCR-D/data/workshop/multipleImages 
+$ ocrd workspace -d ~/projects/OCR-D/workshop/2018_06_26/workspaces/multipleImages create
+$ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/multipleImages
 # Step 0b: Validate workspace
-$ ocrd workspace --no-cache validate 
+$ ocrd workspace validate
 <report valid="false">
   <error>METS has no unique identifier</error>
   <error>No files</error>
@@ -351,7 +356,7 @@ $ ocrd workspace set-id http://resolver.staatsbibliothek-berlin.de/SBB0000F29300
 # <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
 #   <mods:identifier type="purl">http://resolver.staatsbibliothek-berlin.de/SBB0000F29300000000</mods:identifier>
 # </mods:mods>
-$ ocrd workspace --no-cache validate
+$ ocrd workspace validate
 <report valid="false">
   <error>No files</error>
 </report>
@@ -363,31 +368,31 @@ $ wget -O PPN767137728_00000006.tif "http://ngcs.staatsbibliothek-berlin.de/?act
 
 # Step 2: Add images to METS
 # --------------------------
-# Be aware, that the ID and the GROUPID have to identical if the referenced image represents the original image 
+# Be aware, that the ID and the GROUPID have to identical if the referenced image represents the original image
 $ ocrd workspace add --file-grp OCR-D-IMG --file-id OCR-D-IMG_0001 --group-id OCR-D-IMG_0001 --mimetype image/tiff PPN767137728_00000005.tif
 $ ocrd workspace add --file-grp OCR-D-IMG --file-id OCR-D-IMG_0002 --group-id OCR-D-IMG_0002 --mimetype image/tiff PPN767137728_00000006.tif
 
 # Step 3: Validate workspace
 # --------------------------
-$ ocrd workspace --no-cache validate 
+$ ocrd workspace validate
 <report valid="true">
 </report>
 
 # Step 3a: Clone workspace (optional)
 # -----------------------------------
 # Create new directory and clone workspace to this directory
-$ mkdir ../workspace3; cd ../workspace3
-$ ocrd workspace clone --download-all $OLDPWD/mets.xml 
+$ ocrd workspace clone --download $OLDPWD/mets.xml workspace3
 # Show all files (use --help to see all parameters)
+$ cd workspace3
 $ ocrd workspace find
 file:///path/to/new/workspace/OCR-D-IMG/PPN767137728_00000005.tif
 file:///path/to/new/workspace/OCR-D-IMG/PPN767137728_00000006.tif
 
 # Step 4: Binarize Image with KRAKEN
 # ----------------------------------
-$ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KRAKEN-BIN --working-dir ~/projects/OCR-D/data/workshop/binarizeAllImages --mets /tmp/pyocrd-'xyz'/mets.xml 
+$ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KRAKEN-BIN --working-dir ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages --mets /tmp/pyocrd-'xyz'/mets.xml
 # Check result
-$ firefox ~/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png ~/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
+$ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
 # That's it
 ```
 
@@ -396,27 +401,26 @@ $ firefox ~/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/
 For preparing workspace see subsection [Binarize all images of a METS file](#binarize-all-images-of-a-mets-file) (Step 0 - 3)
 
 ```shell=
-# Step 0: Reuse existing workspace 
+# Step 0: Reuse existing workspace
 # --------------------------------
-$ cd ~/projects/OCR-D/data/workshop/multipleImages 
+$ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/multipleImages
 
 # Step 0b: Validate workspace
 # --------------------------
-$ ocrd workspace --no-cache validate 
+$ ocrd workspace validate
 <report valid="true">
 </report>
 
 # Step 1: Clone workspace (optional)
 # -----------------------------------
 # This step creates a temporal directory (/tmp/pyocrd-'xyz')
-$ ocrd workspace --no-cache clone --download-all --mets-url ~/projects/OCR-D/data/workshop/multipleImages/mets.xml 
-/tmp/pyocrd-'xyz'
+$ ocrd workspace clone --download mets.xml ../selectOneImage
 # Change directory
-$ cd /tmp/pyocrd-'xyz'
+$ cd ../selectOneImage
 # Show all files (use --help to see all parameters)
 $ ocrd workspace find
-file:///tmp/pyocrd-'xyz'/OCR-D-IMG/PPN767137728_00000005.tif
-file:///tmp/pyocrd-'xyz'/OCR-D-IMG/PPN767137728_00000006.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/selectOneImage/OCR-D-IMG/PPN767137728_00000005.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/selectOneImage/OCR-D-IMG/PPN767137728_00000006.tif
 
 # Step 2: Binarize Image with KRAKEN
 # ----------------------------------
@@ -425,13 +429,13 @@ file:///tmp/pyocrd-'xyz'/OCR-D-IMG/PPN767137728_00000006.tif
 OCR-D-IMG_0001
 OCR-D-IMG_0002
 Step 2b: Binarize image from a choosen GROUPID
-$ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KRAKEN-BIN --group-id OCR-D-IMG_0001 --working-dir ~/projects/OCR-D/data/workshop/binarizeSelectedImage --mets /tmp/pyocrd-'xyz'/mets.xml 
+$ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KRAKEN-BIN --group-id OCR-D-IMG_0001 --working-dir ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeSelectedImage --mets mets.xml
 # Check result
-$ firefox ~/projects/OCR-D/data/workshop/binarizeSelectedImage/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png 
+$ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeSelectedImage/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
 # That's it
 ```
 
-### Get Ground Truth from OCR-D 
+### Get Ground Truth from OCR-D
 
 ```shell=
 # Create data directory
@@ -441,9 +445,9 @@ $ cd ~/projects/OCR-D/data/groundTruth
 $ wget http://ocr-d.de/sites/all/GTDaten/blumenbach_anatomie_1805.zip
 $ unzip blumenbach_anatomie_1805.zip
 
-# Step 1: Create workspace from METS
-$ mkdir -p ~/projects/OCR-D/data/test; cd ~/projects/OCR-D/data/test
-$ ocrd workspace clone --download-all ~/projects/OCR-D/data/groundTruth/blumenbach_anatomie_1805/mets.xml .
+# Step 1: Clone workspace from METS
+$ mkdir -p ~/projects/OCR-D/workshop/2018_06_26/workspaces/; cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/
+$ ocrd workspace clone --download ~/projects/OCR-D/data/groundTruth/blumenbach_anatomie_1805/blumenbach_anatomie_1805/mets.xml blumenbach_anatomie_1805
 $ cd blumenbach_anatomie_1805/
 ```
 
@@ -464,21 +468,21 @@ $ sudo make install
 The command 'ocrd workspace find' supports several options.
 
 ```shell=
-$ cd ~/projects/OCR-D/data/workshop/binarizeAllImages
+$ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages
 # List all files.
 $ ocrd workspace find
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/PPN767137728.00000005.tif
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/PPN767137728.00000006.tif
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/PPN767137728.00000005.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/PPN767137728.00000006.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
 # List all files inside a fileGrp
 § ocrd workspace find --file-grp OCR-D-IMG-KRAKEN-BIN
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
 # List all files of a GROUPID
 $ ocrd workspace find --group-id  OCR-D-IMG_0001
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/PPN767137728.00000005.tif
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/PPN767137728.00000005.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
 # See 'ocrd workspace find --help' for further information
 ```
 
@@ -487,21 +491,21 @@ file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKE
 The command 'ocrd workspace find' supports several options.
 
 ```shell=
-$ cd ~/projects/OCR-D/data/workshop/binarizeAllImages
+$ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages
 # List all files.
 $ ocrd workspace find
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/PPN767137728.00000005.tif
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/PPN767137728.00000006.tif
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/PPN767137728.00000005.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/PPN767137728.00000006.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
 # List all files inside a fileGrp
 § ocrd workspace find --file-grp OCR-D-IMG-KRAKEN-BIN
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
 # List all files of a GROUPID
 $ ocrd workspace find --group-id  OCR-D-IMG_0001
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/PPN767137728.00000005.tif
-file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/PPN767137728.00000005.tif
+file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png
 ```
 
 ## FAQ
