@@ -1,10 +1,11 @@
-# Cookbook OCR-D
+# OCR-D Cookbook
 
 > A set of recipes for common tasks and solutions for common problems developing and using software within OCR-D.
 
 <!-- BEGIN-MARKDOWN-TOC -->
 * [Introduction](#introduction)
 	* [Scope and purpose of the OCR-D cookbook](#scope-and-purpose-of-the-ocr-d-cookbook)
+	* [Notation](#notation)
 	* [Other OCR-D documentation ](#other-ocr-d-documentation-)
 * [Bootstrapping](#bootstrapping)
 	* [Ubuntu Linux](#ubuntu-linux)
@@ -26,6 +27,7 @@
 	* [Load an existing METS as a workspace](#load-an-existing-mets-as-a-workspace)
 	* [Load an existing METS and referenced files as a workspace](#load-an-existing-mets-and-referenced-files-as-a-workspace)
 	* [Searching the files in a METS](#searching-the-files-in-a-mets)
+	* [Downloading/Copying files to the workspace](#downloadingcopying-files-to-the-workspace)
 * [From image to transcription](#from-image-to-transcription)
 	* [OCR-D workflow](#ocr-d-workflow)
 	* [KRAKEN, OLENA, TESSEROCR, OCROPY](#kraken-olena-tesserocr-ocropy)
@@ -59,10 +61,31 @@ The OCR-D cookbook is a collection of concise recipes that provide pragmatic adv
   * manipulate METS and PAGE documents,
   * create [spec](https://ocr-d-github.com)
 
+### Notation
+
+Lines in code examples
+
+  * starting with `# ` are comments;
+  * starting with `$ ` are typed shell input (everything after `$ ` is);
+  * are output otherwise.
+
+Words in ALL CAPS with a preprended `$` are variable names:
+
+  * `$METS_URL`: URL or file path to a `mets.xml` file, e.g.
+     * `https://github.com/OCR-D/assets/raw/master/data/kant_aufklaerung_1784/mets.xml`
+
+  * `$WORKSPACE_DIR`: File path of the workspace created, e.g.
+     * `$WORKSPACE_DIR`
+     * `/data/ocrd-workspaces/kant-aufklaerung-2018-07-11`
+
+When referring to a "`something` command", it is actually `ocrd something` on
+the command line.
+
 ### Other OCR-D documentation 
 
- - [Specification](https://ocr-d.github.io)
- - [Glossary](https://ocr-d.github.io/glossary)
+  * [Specification](https://ocr-d.github.io): Formal specifications
+  * [Glossary](https://ocr-d.github.io/glossary): A glossary of terms in the OCR
+    domain as used throughout our documenation
 
 ## Bootstrapping
 
@@ -129,8 +152,8 @@ sudo apt install \
 Create a `virtualenv` in an easy to remember or easy-to-search-shell-history-for location:
 
 ```sh
-virtualenv -p 3.6 $HOME/ocrd-venv3
-virtualenv -p 2.7 $HOME/ocrd-venv2 # If you require Python2 compat
+$ virtualenv -p 3.6 $HOME/ocrd-venv3
+$ virtualenv -p 2.7 $HOME/ocrd-venv2 # If you require Python2 compat
 ```
 
 #### Activate virtualenv
@@ -138,7 +161,7 @@ virtualenv -p 2.7 $HOME/ocrd-venv2 # If you require Python2 compat
 You need to activate this virtual environment whenever you open a new terminal:
 
 ```sh
-source $HOME/ocrd-venv3/bin/activate
+$ source $HOME/ocrd-venv3/bin/activate
 ```
 
 If you tend to forget sourcing the script before working on your code, add
@@ -150,7 +173,7 @@ out and back in.
 Make sure, the [`virtualenv` is activated](#activate-virtualenv) and install [`ocrd`](https://pypi.org/projects/ocrd) with pip:
 
 ```sh
-pip install ocrd
+$ pip install ocrd
 ```
 
 ### Generic setup
@@ -160,7 +183,7 @@ it's only used for its CLI (and as a depencency for Python-based OCR-D
 software), you can install it system-wide:
 
 ```sh
-pip install ocrd
+$ pip install ocrd
 ```
 
 ### Setup from source
@@ -169,24 +192,23 @@ If you want to build the `ocrd` package [from
 source](https://github.com/OCR-D/core) to stay up-to-date on unreleased changes
 or to contribute code, you can clone the repository and build from source:
 
-```
-# Clone repository
-git clone https://github.com/OCR-D/core
-cd core
+```sh
+$ git clone https://github.com/OCR-D/core
+$ cd core
 ```
 
 If you are using the [python setup](#python-setup):
 
 ```sh
-pip install -r requirements.txt
-pip install -e .
+$ pip install -r requirements.txt
+$ pip install -e .
 ```
 
 If you are using the [generic setup](#generic-setup):
 
 ```sh
-sudo pip install -r requirements.txt
-sudo pip install .
+$ sudo pip install -r requirements.txt
+$ sudo pip install .
 ```
 
 ### Verify setup
@@ -195,10 +217,10 @@ After setting up, check that these commands do not throw errors and have the
 minimum version:
 
 ```sh
-git --version
+$ git --version
 # Version 1.7 or higher?
 
-make --version
+$ make --version
 # Version 9.0.1 or higher?
 
 $ ocrd --version
@@ -234,12 +256,12 @@ The `workspace` command's syntax and mechanics are strongly inspired by
 For most commands, `workspace` assumes the workspace is the *current working
 directory*. If you want to use a different directory, use the `-d / --directory` option
 
-```
+```sh
 # Listing files in the workspace at $PWD
-ocrd workspace find
+$ ocrd workspace find
 
-# Listing files in the workspace at /tmp/temp-workspace
-ocrd workspace -d /tmp/temp-workspace
+# Listing files in the workspace at $WORKSPACE_DIR
+$ ocrd workspace -d $WORKSPACE_DIR
 ```
 
 #### Use another name than `mets.xml`
@@ -250,15 +272,15 @@ To select a different basename for that file, use the `-M / --mets-basename` opt
 
 ```sh
 # Assume this workspace structure
-$ find /tmp/temp-workspace
-/tmp/temp-workspace
-/tmp/temp-workspace/mets3000.xml
+$ find $WORKSPACE_DIR
+$WORKSPACE_DIR
+$WORKSPACE_DIR/mets3000.xml
 
 # This will fail in a loud and unpleasant manner
-$ ocrd workspace -d /tmp/temp-workspace find
+$ ocrd workspace -d $WORKSPACE_DIR find
 
 # This will not
-$ ocrd workspace -d /tmp/temp-workspace -M mets3000.xml find
+$ ocrd workspace -d $WORKSPACE_DIR -M mets3000.xml find
 ```
 
 ### Creating an empty workspace
@@ -275,7 +297,7 @@ $ ocrd workspace init ws1
 To create a workspace and save a METS file, use the `workspace clone` command:
 
 ```sh
-$ ocrd workspace clone https://github.com/OCR-D/assets/raw/master/data/kant_aufklaerung_1784/mets.xml new-workspace
+$ ocrd workspace clone $METS_URL new-workspace
 /home/ocr/new-workspace
 
 $ find new-workspace
@@ -289,29 +311,59 @@ To not only [clone the METS](load-an-existing-mets-as-a-workspace) but also
 download the contained files, use `workspace clone` with the `--download` flag:
 
 ```sh
-$ ocrd workspace clone --download https://github.com/OCR-D/assets/raw/master/data/kant_aufklaerung_1784/mets.xml new-workspace
-/home/ocr/new-workspace
+$ ocrd workspace clone --download $METS_URL $WORKSPACE_DIR
 
-$ find new-workspace
-new-workspace
-new-workspace/mets.xml
-new-workspace/OCR-D-GT-ALTO
-new-workspace/OCR-D-GT-ALTO/kant_aufklaerung_1784_0020.xml
-new-workspace/OCR-D-GT-PAGE
-new-workspace/OCR-D-GT-PAGE/kant_aufklaerung_1784_0020.xml
-new-workspace/OCR-D-IMG
-new-workspace/OCR-D-IMG/kant_aufklaerung_1784_0020.tif
+$ find $WORKSPACE_DIR
+$WORKSPACE_DIR
+$WORKSPACE_DIR/mets.xml
+$WORKSPACE_DIR/OCR-D-GT-ALTO
+$WORKSPACE_DIR/OCR-D-GT-ALTO/kant_aufklaerung_1784_0020.xml
+$WORKSPACE_DIR/OCR-D-GT-PAGE
+$WORKSPACE_DIR/OCR-D-GT-PAGE/kant_aufklaerung_1784_0020.xml
+$WORKSPACE_DIR/OCR-D-IMG
+$WORKSPACE_DIR/OCR-D-IMG/kant_aufklaerung_1784_0020.tif
 ```
 
 **NOTE**: This will download **all** files, which can mean hundreds of
-high-resolution images. If you want more fine-grained control, [use the
-`workspace find` command with the `download` flag](TODO)
+high-resolution images. If you want more fine-grained control,
+[clone the bare workspace](#load-an-existing-mets-as-a-workspace)
+and then 
+[use the `workspace find` command with the `download` flag](downloading-copying-files-to-the-workspace)
 
 ### Searching the files in a METS
 
 You can search the files in a METS file with the `workspace find` command.
 
-  * All TIFF files in the OCR-D-IMG-BIN group: `ocrd workspace find
+  * All files: `ocrd workspace find`
+  * All TIFF files: `ocrd workspace find --mimetype image/tiff`
+  * All TIFF files in the OCR-D-IMG-BIN group: `ocrd workspace find --mimetype image/tiff --file-grp OCR-D-IMG-BIN`
+
+See `ocrd workspace --find` for the full range of selection options
+
+### Downloading/Copying files to the workspace
+
+To download remote or copy local files referenced in the `mets.xml` to the
+workspace, append the `--download` flag to the [`workspace find`
+command](#searching-the-files-in-a-mets):
+
+```sh
+# Clone Bare workspace:
+$ ocrd workspace clone $WORKSPACE_DIR
+
+$ find $WORKSPACE_DIR
+$WORKSPACE_DIR
+$WORKSPACE_DIR/mets.xml
+
+# Download all files in the `OCR-D-IMG` file group
+$ ocrd workspace -d $WORKSPACE_DIR find --file-grp OCR-D-IMG
+[...]
+
+$ find $WORKSPACE_DIR
+$WORKSPACE_DIR
+$WORKSPACE_DIR/mets.xml
+$WORKSPACE_DIR/OCR-D-IMG
+$WORKSPACE_DIR/OCR-D-IMG/kant_aufklaerung_1784_0020.tif
+```
 
 ## From image to transcription
 
