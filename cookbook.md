@@ -1,20 +1,54 @@
 # Cookbook OCR-D
+
+<!-- BEGIN-MARKDOWN-TOC -->
+* [From image to transcription](#from-image-to-transcription)
+	* [Scope and Purpose](#scope-and-purpose)
+	* [Prerequisites](#prerequisites)
+	* [Requirements](#requirements)
+	* [OCR-D workflow](#ocr-d-workflow)
+	* [Installation](#installation)
+		* [Python & OCR-D tools](#python---ocr-d-tools)
+		* [Git](#git)
+		* [KRAKEN, OLENA, TESSEROCR, OCROPY](#kraken-olena-tesserocr-ocropy)
+* [Workflows](#workflows)
+	* [Binarize one image without existing METS file.](#binarize-one-image-without-existing-mets-file)
+	* [Binarize all images of a METS file.](#binarize-all-images-of-a-mets-file)
+	* [Binarize one image of a METS file.](#binarize-one-image-of-a-mets-file)
+	* [Get Ground Truth from OCR-D ](#get-ground-truth-from-ocr-d-)
+	* [Installing a MP executable](#installing-a-mp-executable)
+	* [Tools for MP](#tools-for-mp)
+		* [Getting files referenced inside METS](#getting-files-referenced-inside-mets)
+		* [Getting files referenced inside METS](#getting-files-referenced-inside-mets-1)
+* [FAQ](#faq)
+	* [Question: After fixing error 'ocrd workspace validate' will still fail](#question-after-fixing-error--ocrd-workspace-validate--will-still-fail)
+* [Links](#links)
+
+<!-- END-MARKDOWN-TOC -->
+
 ## From image to transcription
+
 ### Scope and Purpose
+
 The cookbook helps developers to write modules for the OCR-D workflow.
+
 OCR-D workflow is designed to get the text out of scanned pages of prints from the 17th to 19th Century.
 
 ### Prerequisites
+
  - METS
  - PAGE XML
 
 ### Requirements
+
 OS     | Linux (Ubuntu 18.04)
 ------:|----
 Python | 3.5 or higher
 GIT     | 
+
 ### OCR-D workflow
+
 The workflow consits of several steps from the image with some additional metadata to the textual content of the image. The tools used to generate the text are divided in the following categories:
+
 - Image preprocessing
 - Layout analysis
 - Text recognition and optimization
@@ -23,6 +57,7 @@ The workflow consits of several steps from the image with some additional metada
 - Quality assurance
 
 The workflow may be divided in the following steps:
+
 - preprocessing/characterization
 - preprocessing/optimization
 - preprocessing/optimization/cropping
@@ -41,7 +76,9 @@ The workflow may be divided in the following steps:
 - recognition/font-identification
 
 ### Installation
+
 #### Python & OCR-D tools
+
 ```shell=
 # Step 1: Check/Install python
 # ----------------------------
@@ -64,7 +101,9 @@ sudo pip install ocrd
 # -------------------------------------------
 # Step 3a: Check/Install git and dependencies
 ```
-See subsection [git](#Git)
+
+See subsection [git](#git)
+
 ```shell=
 # Step 3b: Clone repository from OCR-D
 # Create Working Directory
@@ -97,12 +136,10 @@ Commands:
 
 # That's it!
 # You are now ready to test/execute your algorithms.
-
-
-
 ```
 
 #### Git
+
 ```shell=
 # Step 1: Check/Install git
 # Version 2.10 or higher
@@ -114,11 +151,15 @@ $ make --version
 make: Command not found
 $ sudo apt install make
 ```
+
 #### KRAKEN, OLENA, TESSEROCR, OCROPY
+
 ```shell=
 # Step 0: Check/Install git and dependencies
 ```
-See subsection [git](#Git)
+
+See subsection [git](#git)
+
 ```shell=
 # Step 1: Clone repositories
 # Step 1a: KRAKEN
@@ -131,10 +172,10 @@ $ make install
 $ ocrd-kraken-binarize --version
 Version 0.0.1, ocrd/core 0.3.1
 ```
+
 ## Workflows
 
 ### Binarize one image without existing METS file.
-
 
 ```shell=
 # Step 0: Create Workspace & METS file 
@@ -182,11 +223,15 @@ file:///path/to/new/workspace/OCR-D-IMG/PPN767137728_00000005.tif
 # Step 4: Execute binarization of image
 # -------------------------------------
 ```
-See subsection [git](#Git)
+
+See subsection [git](#git)
+
 ```shell=
 # Step 4a: Install KRAKEN see [Installation KRAKEN] (#KRAKEN, OLENA, TESSEROCR, OCROPY)
 ```
+
 See subsection [Install KRAKEN](#KRAKEN-OLENA-TESSEROCR-OCROPY)
+
 ```shell=
 # Step 4b: List all available tools
 $ ocrd ocrd-tool   ~/projects/OCR-D/ocrd_kraken/ocrd-tool.json list-tools
@@ -267,10 +312,11 @@ $ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KR
 # Check result
 $ firefox ~/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png ~/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0002.bin.png
 # That's it
+```
 
 ### Binarize one image of a METS file.
 
-For preparing workspace see subsection [Binarize all images of a METS file](#Binarize-all-images-of-a-METS-file) (Step 0 - 3)
+For preparing workspace see subsection [Binarize all images of a METS file](#binarize-all-images-of-a-mets-file) (Step 0 - 3)
 
 ```shell=
 # Step 0: Reuse existing workspace 
@@ -309,6 +355,7 @@ $ firefox ~/projects/OCR-D/data/workshop/binarizeSelectedImage/OCR-D-IMG-KRAKEN-
 ```
 
 ### Get Ground Truth from OCR-D 
+
 ```shell=
 # Create data directory
 $ mkdir -p ~/projects/OCR-D/data/groundTruth
@@ -332,10 +379,13 @@ $ git clone https://github.com/OCR-D/ocrd_kraken
 $ cd ocrd_kraken
 $ sudo make install
 ```
+
 ### Tools for MP
 
 #### Getting files referenced inside METS
+
 The command 'ocrd workspace find' supports several options.
+
 ```shell=
 $ cd ~/projects/OCR-D/data/workshop/binarizeAllImages
 # List all files.
@@ -356,7 +406,9 @@ file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKE
 ```
 
 #### Getting files referenced inside METS
+
 The command 'ocrd workspace find' supports several options.
+
 ```shell=
 $ cd ~/projects/OCR-D/data/workshop/binarizeAllImages
 # List all files.
@@ -376,8 +428,12 @@ file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKE
 ```
 
 ## FAQ
+
 ### Question: After fixing error 'ocrd workspace validate' will still fail
+
 ocrd uses a cached directory (/tmp/cache-pyocrd). You may remove it manually or use the appropriate switch (--no-cache).
+
 ## Links
+
  - [Glossary](https://ocr-d.github.io/glossary)
  - [Specification](https://ocr-d.github.io)
