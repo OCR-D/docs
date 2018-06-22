@@ -6,6 +6,9 @@
 * [Introduction](#introduction)
 	* [Scope and purpose of the OCR-D cookbook](#scope-and-purpose-of-the-ocr-d-cookbook)
 	* [Other OCR-D documentation ](#other-ocr-d-documentation-)
+* [Bootstrapping](#bootstrapping)
+	* [Ubuntu Linux](#ubuntu-linux)
+	* [Essential packages](#essential-packages)
 * [From image to transcription](#from-image-to-transcription)
 	* [Requirements](#requirements)
 	* [OCR-D workflow](#ocr-d-workflow)
@@ -48,6 +51,40 @@ The OCR-D cookbook is a collection of concise recipes that provide pragmatic adv
 
  - [Specification](https://ocr-d.github.io)
  - [Glossary](https://ocr-d.github.io/glossary)
+
+## Bootstrapping
+
+### Ubuntu Linux
+
+OCR-D development is targeted towards Ubuntu Linux >= 18.04 since it is free,
+widely used and well-documented.
+
+Most of the setup will be the same for other Debian-based Linuxes and older
+Ubuntu versions. You might run into problems with outdated system packages
+though.
+
+In particular, it can be tricky at times to install `tesseract` at the right
+version. Try [alex-p's PPA](https://launchpad.net/~alex-p/+archive/ubuntu/tesseract-ocr) or build
+tesseract from source.
+
+### Essential packages
+
+```sh
+sudo apt install \
+  git \
+  build-essential \
+  python python-pip python-virtualenv \
+  python3 python3-pip python3-virtualenv \
+  libimage-exiftool-perl \
+  libxml2-utils
+```
+
+  * `git`: Version control, [OCR-D uses git extensively](https://github.com/OCR-D)
+  * `build-essential`: Installs `make` and C/C++ compiler
+  * `python`: Python 2.7 for legacy applications like `ocropy`
+  * `python3`: Current version of Python on which [the OCR-D software core stack](https://github.com/OCR-D/core) is built
+  * `python-pip`/`python3-pip`: Python package manager
+  * `python-virtualenv`/`python3-virtualenv`: Tool for creating isolated, reproducible python environments
 
 ## From image to transcription
 
