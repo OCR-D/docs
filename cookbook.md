@@ -19,9 +19,13 @@
 	* [Verify setup](#verify-setup)
 * [Working with METS](#working-with-mets)
 	* [Workspace](#workspace)
+		* [Git similarity intended](#git-similarity-intended)
+		* [Set the workspace to work on](#set-the-workspace-to-work-on)
+		* [Use another name than `mets.xml`](#use-another-name-than-metsxml)
 	* [Creating an empty workspace](#creating-an-empty-workspace)
 	* [Load an existing METS as a workspace](#load-an-existing-mets-as-a-workspace)
 	* [Load an existing METS and referenced files as a workspace](#load-an-existing-mets-and-referenced-files-as-a-workspace)
+	* [Searching the files in a METS](#searching-the-files-in-a-mets)
 * [From image to transcription](#from-image-to-transcription)
 	* [OCR-D workflow](#ocr-d-workflow)
 	* [KRAKEN, OLENA, TESSEROCR, OCROPY](#kraken-olena-tesserocr-ocropy)
@@ -36,8 +40,6 @@
 		* [Getting files referenced inside METS](#getting-files-referenced-inside-mets-1)
 * [FAQ](#faq)
 	* [How do I get help on specific CLI commands?](#how-do-i-get-help-on-specific-cli-commands)
-	* [Question: After fixing error 'ocrd workspace validate' will still fail](#question-after-fixing-error--ocrd-workspace-validate--will-still-fail)
-* [Links](#links)
 
 <!-- END-MARKDOWN-TOC -->
 
@@ -222,8 +224,42 @@ of a git repository.
 The `workspace` command of the `ocrd` tool allows various manipulations of
 workspaces and therefore METS files.
 
-It's syntax and mechanics are strongly inspired by [`git`]() so if you know
-`git`, this should be familiar.
+#### Git similarity intended
+
+The `workspace` command's syntax and mechanics are strongly inspired by
+[`git`]() so if you know `git`, this should be familiar.
+
+#### Set the workspace to work on
+
+For most commands, `workspace` assumes the workspace is the *current working
+directory*. If you want to use a different directory, use the `-d / --directory` option
+
+```
+# Listing files in the workspace at $PWD
+ocrd workspace find
+
+# Listing files in the workspace at /tmp/temp-workspace
+ocrd workspace -d /tmp/temp-workspace
+```
+
+#### Use another name than `mets.xml`
+
+According to [convention](TODO), the METS of a workspace is named `mets.xml`.
+
+To select a different basename for that file, use the `-M / --mets-basename` option:
+
+```sh
+# Assume this workspace structure
+$ find /tmp/temp-workspace
+/tmp/temp-workspace
+/tmp/temp-workspace/mets3000.xml
+
+# This will fail in a loud and unpleasant manner
+$ ocrd workspace -d /tmp/temp-workspace find
+
+# This will not
+$ ocrd workspace -d /tmp/temp-workspace -M mets3000.xml find
+```
 
 ### Creating an empty workspace
 
@@ -231,7 +267,7 @@ To create an empty workspace for you to add files to, use the `workspace init` c
 
 ```sh
 $ ocrd workspace init ws1
-> /home/ocr/ws1
+/home/ocr/ws1
 ```
 
 ### Load an existing METS as a workspace
@@ -270,6 +306,12 @@ new-workspace/OCR-D-IMG/kant_aufklaerung_1784_0020.tif
 **NOTE**: This will download **all** files, which can mean hundreds of
 high-resolution images. If you want more fine-grained control, [use the
 `workspace find` command with the `download` flag](TODO)
+
+### Searching the files in a METS
+
+You can search the files in a METS file with the `workspace find` command.
+
+  * All TIFF files in the OCR-D-IMG-BIN group: `ocrd workspace find
 
 ## From image to transcription
 
@@ -593,9 +635,3 @@ ocrd --help
 ocrd workspace --help
 ocrd workspace add --help
 ```
-
-### Question: After fixing error 'ocrd workspace validate' will still fail
-
-ocrd uses a cached directory (/tmp/cache-pyocrd). You may remove it manually or use the appropriate switch (--no-cache).
-
-## Links
