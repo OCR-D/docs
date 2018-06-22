@@ -335,7 +335,7 @@ Version 0.0.1, ocrd/core 0.4.0
 $ mkdir -p ~/projects/OCR-D/workshop/2018_06_26/workspaces
 $ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces
 # Step 0b: Create workspace including METS file in subdir `./emptyWorkspace`
-$ ocrd workspace -d emptyWorkspace create
+$ ocrd workspace init emptyWorkspace
 $ cd emptyWorkspace
 $ ocrd workspace validate
 $ cd ws1  
@@ -417,7 +417,7 @@ $ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeEmptyWorkspace
 # Step 0: Create Workspace & METS file
 # ------------------------
 # Step 0a: Create workspace including METS file
-$ ocrd workspace -d ~/projects/OCR-D/workshop/2018_06_26/workspaces/multipleImages create
+$ ocrd workspace init ~/projects/OCR-D/workshop/2018_06_26/workspaces/multipleImages
 $ cd ~/projects/OCR-D/workshop/2018_06_26/workspaces/multipleImages
 # Step 0b: Validate workspace
 $ ocrd workspace validate
