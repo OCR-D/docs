@@ -251,6 +251,15 @@ workspaces and therefore METS files.
 The `workspace` command's syntax and mechanics are strongly inspired by
 [`git`]() so if you know `git`, this should be familiar.
 
+| `git`    | `ocrd workspace`  |
+|----------|-------------------|
+| init     | `init`            |
+| clone    | `clone`           |
+| add      | `add`             |
+| ls-files | `find`            |
+| fetch    | `find --download` |
+| archive  | `pack`            |
+
 #### Set the workspace to work on
 
 For most commands, `workspace` assumes the workspace is the *current working
