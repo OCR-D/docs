@@ -6,8 +6,9 @@
 	* [Terminal setup](#terminal-setup)
 	* [Tesseract](#tesseract)
 	* [Python](#python)
-		* [virtualenv](#virtualenv)
-		* [core](#core)
+		* [Install virtualenv](#install-virtualenv)
+		* [Default to venv3](#default-to-venv3)
+	* [Bootstrap ocrd](#bootstrap-ocrd)
 
 <!-- END-MARKDOWN-TOC -->
 
@@ -85,10 +86,10 @@ echo "source $HOME/venv3/bin/activate" > ~/.zshrc.local
 
 ```sh
 # Clone the repo
-git clone https://github.com/kba/ocrd-docs build/ocrd-docs
+git clone https://github.com/kba/ocrd-docs build/docs
 
 # Setup makefile
-ln -sr build/ocrd-docs/vbox/Makefile
+ln -sr build/docs/vbox/Makefile
 
 # Clone repos
 make clone
