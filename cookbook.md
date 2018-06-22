@@ -1,5 +1,7 @@
 # Cookbook OCR-D
 
+> A set of recipes for common tasks and solutions for common problems developing and using software within OCR-D.
+
 <!-- BEGIN-MARKDOWN-TOC -->
 * [From image to transcription](#from-image-to-transcription)
 	* [Scope and Purpose](#scope-and-purpose)
