@@ -3,9 +3,10 @@
 > A set of recipes for common tasks and solutions for common problems developing and using software within OCR-D.
 
 <!-- BEGIN-MARKDOWN-TOC -->
+* [Introduction](#introduction)
+	* [Scope and purpose of the OCR-D cookbook](#scope-and-purpose-of-the-ocr-d-cookbook)
+	* [Other OCR-D documentation ](#other-ocr-d-documentation-)
 * [From image to transcription](#from-image-to-transcription)
-	* [Scope and Purpose](#scope-and-purpose)
-	* [Prerequisites](#prerequisites)
 	* [Requirements](#requirements)
 	* [OCR-D workflow](#ocr-d-workflow)
 	* [Installation](#installation)
@@ -27,18 +28,28 @@
 
 <!-- END-MARKDOWN-TOC -->
 
+## Introduction
+
+This document, the "OCR-D cookbook" helps developers writing software and using
+tools within the OCR-D ecosystem.
+
+OCR-D is an initiative to improve text recognition within the context of mass digitization in cultural heritage institutions, with a strong focus on historical documents (16th - 19th century).
+
+### Scope and purpose of the OCR-D cookbook
+
+The OCR-D cookbook is a collection of concise recipes that provide pragmatic advise on how to
+
+  * bootstrap a development environment, 
+  * work with the `ocrd` command line tool,
+  * manipulate METS and PAGE documents,
+  * create [spec](https://ocr-d-github.com)
+
+### Other OCR-D documentation 
+
+ - [Specification](https://ocr-d.github.io)
+ - [Glossary](https://ocr-d.github.io/glossary)
+
 ## From image to transcription
-
-### Scope and Purpose
-
-The cookbook helps developers to write modules for the OCR-D workflow.
-
-OCR-D workflow is designed to get the text out of scanned pages of prints from the 17th to 19th Century.
-
-### Prerequisites
-
- - METS
- - PAGE XML
 
 ### Requirements
 
@@ -436,6 +447,3 @@ file:///home/ocrd/projects/OCR-D/data/workshop/binarizeAllImages/OCR-D-IMG-KRAKE
 ocrd uses a cached directory (/tmp/cache-pyocrd). You may remove it manually or use the appropriate switch (--no-cache).
 
 ## Links
-
- - [Glossary](https://ocr-d.github.io/glossary)
- - [Specification](https://ocr-d.github.io)
