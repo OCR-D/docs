@@ -10,18 +10,16 @@
 	* [Ubuntu Linux](#ubuntu-linux)
 	* [Essential system packages](#essential-system-packages)
 	* [Python API and CLI](#python-api-and-cli)
-* [Python setup](#python-setup)
-	* [Create virtualenv](#create-virtualenv)
-	* [Activate virtualenv](#activate-virtualenv)
-	* [Install `ocrd` in virtualenv](#install-ocrd-in-virtualenv)
-* [Generic setup](#generic-setup)
+	* [Python setup](#python-setup)
+		* [Create virtualenv](#create-virtualenv)
+		* [Activate virtualenv](#activate-virtualenv)
+		* [Install `ocrd` in virtualenv from pypi](#install-ocrd-in-virtualenv-from-pypi)
+	* [Generic setup](#generic-setup)
+	* [Setup from source](#setup-from-source)
+	* [Verify setup](#verify-setup)
 * [From image to transcription](#from-image-to-transcription)
-	* [Requirements](#requirements)
 	* [OCR-D workflow](#ocr-d-workflow)
-	* [Installation](#installation)
-		* [Python & OCR-D tools](#python---ocr-d-tools)
-		* [Git](#git)
-		* [KRAKEN, OLENA, TESSEROCR, OCROPY](#kraken-olena-tesserocr-ocropy)
+	* [KRAKEN, OLENA, TESSEROCR, OCROPY](#kraken-olena-tesserocr-ocropy)
 * [Workflows](#workflows)
 	* [Binarize one image without existing METS file.](#binarize-one-image-without-existing-mets-file)
 	* [Binarize all images of a METS file.](#binarize-all-images-of-a-mets-file)
@@ -100,13 +98,13 @@ This API is exposed via a command line tool `ocrd`. This CLI offers much of the
 same functionality of the API without the need to write Python code and can be readily
 integrated into shell scripts and external command callouts in your code.
 
-So, If you [do not intend to code in Python](#generic-setup) or want to wrap existing/legacy tools, a
-major part of the functionality of the API is available as a command line tool
-`ocrd`.
+So, If you [do not intend to code in Python](#generic-setup) or want to wrap
+existing/legacy tools, a major part of the functionality of the API is
+available as a command line tool `ocrd`.
 
-## Python setup
+### Python setup
 
-### Create virtualenv
+#### Create virtualenv
 
 We strongly recommend using `virtualenv` (or similar tools if they are more
 familiar to you) over system-wide installation of python packages. It reduces
@@ -127,7 +125,7 @@ virtualenv -p 3.6 $HOME/ocrd-venv3
 virtualenv -p 2.7 $HOME/ocrd-venv2 # If you require Python2 compat
 ```
 
-### Activate virtualenv
+#### Activate virtualenv
 
 You need to activate this virtual environment whenever you open a new terminal:
 
@@ -139,7 +137,7 @@ If you tend to forget sourcing the script before working on your code, add
 `source $HOME/ocrd-venv3` to the end of your `.bashrc`/`.zshrc` file and log
 out and back in.
 
-### Install `ocrd` in virtualenv
+#### Install `ocrd` in virtualenv from pypi
 
 Make sure, the [`virtualenv` is activated](#activate-virtualenv) and install [`ocrd`](https://pypi.org/projects/ocrd) with pip:
 
@@ -147,7 +145,7 @@ Make sure, the [`virtualenv` is activated](#activate-virtualenv) and install [`o
 pip install ocrd
 ```
 
-## Generic setup
+### Generic setup
 
 In this variant, you still need to install the `ocrd` Python package but since
 it's only used for its CLI (and as a depencency for Python-based OCR-D
@@ -157,14 +155,49 @@ software), you can install it system-wide:
 pip install ocrd
 ```
 
+### Setup from source
+
+If you want to build the `ocrd` package [from
+source](https://github.com/OCR-D/core) to stay up-to-date on unreleased changes
+or to contribute code, you can clone the repository and build from source:
+
+```
+# Clone repository
+git clone https://github.com/OCR-D/core
+cd core
+```
+
+If you are using the [python setup](#python-setup):
+
+```sh
+pip install -r requirements.txt
+pip install -e .
+```
+
+If you are using the [generic setup](#generic-setup):
+
+```sh
+sudo pip install -r requirements.txt
+sudo pip install .
+```
+
+### Verify setup
+
+After setting up, check that these commands do not throw errors and have the
+minimum version:
+
+```sh
+git --version
+# Version 1.7 or higher?
+
+make --version
+# Version 9.0.1 or higher?
+
+$ ocrd --version
+# ocrd, version 0.4.0
+```
+
 ## From image to transcription
-
-### Requirements
-
-OS     | Linux (Ubuntu 18.04)
-------:|----
-Python | 3.5 or higher
-GIT     | 
 
 ### OCR-D workflow
 
@@ -196,90 +229,13 @@ The workflow may be divided in the following steps:
 - recognition/text-recognition
 - recognition/font-identification
 
-### Installation
-
-#### Python & OCR-D tools
-
-```shell=
-# Step 1: Check/Install python
-# ----------------------------
-# Version 3.5 or higher
-python3 --version 
-sudo apt install python3
-# Step 2: Check/Install pip (Packagemanagement system for Python) 
-# -------------------------------------------
-# Version 9.0.1 or higher?
-pip --version
-sudo apt install python-pip
-# Step 3: Check/Install OCR-D Tools
-# -------------------------------------------
-which ocrd
-sudo pip install ocrd
-# -----------
-# Alternative
-# -----------
-# Step 3: Install OCR-D Tools from GitHub
-# -------------------------------------------
-# Step 3a: Check/Install git and dependencies
-```
-
-See subsection [git](#git)
-
-```shell=
-# Step 3b: Clone repository from OCR-D
-# Create Working Directory
-$ mkdir -p ~/projects/OCR-D
-# Change to Working Directory
-$ cd ~/projects/OCR-D
-# Clone repository
-$ git clone https://github.com/OCR-D/core
-# Step 3c: Create OCR-D Tools
-$ cd core
-$ make deps-ubuntu deps-pip install
-# Test Installation
-$ ocrd --version
-ocrd, version 0.3.1
-$ ocrd
-Usage: ocrd [OPTIONS] COMMAND [ARGS]...
-
-  CLI to OCR-D
-
-Options:
-  --help  Show this message and exit.
-
-Commands:
-  bashlib           Work with bash library
-  generate-swagger  Generate Swagger schema from ocrd-tool.json...
-  ocrd-tool         Work with ocrd-tool.json
-  process           Execute OCR-D processors for a METS file...
-  server            Start OCR-D web services
-  workspace         Working with workspace
-
-# That's it!
-# You are now ready to test/execute your algorithms.
-```
-
-#### Git
-
-```shell=
-# Step 1: Check/Install git
-# Version 2.10 or higher
-$ git --version
-git: Command not found
-$ sudo apt install git
-# Step 2: Check/Install make
-$ make --version
-make: Command not found
-$ sudo apt install make
-```
-
-#### KRAKEN, OLENA, TESSEROCR, OCROPY
+### KRAKEN, OLENA, TESSEROCR, OCROPY
 
 ```shell=
 # Step 0: Check/Install git and dependencies
 ```
 
-See subsection [git](#git)
+See subsection [Bootstrapping](#bootstrapping)
 
 ```shell=
 # Step 1: Clone repositories
@@ -345,7 +301,7 @@ file:///path/to/new/workspace/OCR-D-IMG/PPN767137728_00000005.tif
 # -------------------------------------
 ```
 
-See subsection [git](#git)
+See subsection [Bootstrapping](#bootstrapping)
 
 ```shell=
 # Step 4a: Install KRAKEN see [Installation KRAKEN] (#KRAKEN, OLENA, TESSEROCR, OCROPY)
