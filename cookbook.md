@@ -8,7 +8,13 @@
 	* [Other OCR-D documentation ](#other-ocr-d-documentation-)
 * [Bootstrapping](#bootstrapping)
 	* [Ubuntu Linux](#ubuntu-linux)
-	* [Essential packages](#essential-packages)
+	* [Essential system packages](#essential-system-packages)
+	* [Python API and CLI](#python-api-and-cli)
+* [Python setup](#python-setup)
+	* [Create virtualenv](#create-virtualenv)
+	* [Activate virtualenv](#activate-virtualenv)
+	* [Install `ocrd` in virtualenv](#install-ocrd-in-virtualenv)
+* [Generic setup](#generic-setup)
 * [From image to transcription](#from-image-to-transcription)
 	* [Requirements](#requirements)
 	* [OCR-D workflow](#ocr-d-workflow)
@@ -67,14 +73,14 @@ In particular, it can be tricky at times to install `tesseract` at the right
 version. Try [alex-p's PPA](https://launchpad.net/~alex-p/+archive/ubuntu/tesseract-ocr) or build
 tesseract from source.
 
-### Essential packages
+### Essential system packages
 
 ```sh
 sudo apt install \
   git \
   build-essential \
-  python python-pip python-virtualenv \
-  python3 python3-pip python3-virtualenv \
+  python python-pip \
+  python3 python3-pip \
   libimage-exiftool-perl \
   libxml2-utils
 ```
@@ -83,8 +89,73 @@ sudo apt install \
   * `build-essential`: Installs `make` and C/C++ compiler
   * `python`: Python 2.7 for legacy applications like `ocropy`
   * `python3`: Current version of Python on which [the OCR-D software core stack](https://github.com/OCR-D/core) is built
-  * `python-pip`/`python3-pip`: Python package manager
-  * `python-virtualenv`/`python3-virtualenv`: Tool for creating isolated, reproducible python environments
+  * `pip`/`pip3`: Python package management
+
+### Python API and CLI
+
+The OCR-D toolkit is based on a [Python API](https://ocr-d.github.io/core) that
+you can reuse [if you are developing software in Python](#python-setup).
+
+This API is exposed via a command line tool `ocrd`. This CLI offers much of the
+same functionality of the API without the need to write Python code and can be readily
+integrated into shell scripts and external command callouts in your code.
+
+So, If you [do not intend to code in Python](#generic-setup) or want to wrap existing/legacy tools, a
+major part of the functionality of the API is available as a command line tool
+`ocrd`.
+
+## Python setup
+
+### Create virtualenv
+
+We strongly recommend using `virtualenv` (or similar tools if they are more
+familiar to you) over system-wide installation of python packages. It reduces
+the amount of pain supporting multiple Python versions and allows you to test
+your software in various configurations while you develop it, spinning up and
+tearing down environments as necessary.
+
+```sh
+sudo apt install \
+  python3-virtualenv \
+  python-virtualenv # If you require Python2 compat
+```
+
+Create a `virtualenv` in an easy to remember or easy-to-search-shell-history-for location:
+
+```sh
+virtualenv -p 3.6 $HOME/ocrd-venv3
+virtualenv -p 2.7 $HOME/ocrd-venv2 # If you require Python2 compat
+```
+
+### Activate virtualenv
+
+You need to activate this virtual environment whenever you open a new terminal:
+
+```sh
+source $HOME/ocrd-venv3/bin/activate
+```
+
+If you tend to forget sourcing the script before working on your code, add
+`source $HOME/ocrd-venv3` to the end of your `.bashrc`/`.zshrc` file and log
+out and back in.
+
+### Install `ocrd` in virtualenv
+
+Make sure, the [`virtualenv` is activated](#activate-virtualenv) and install [`ocrd`](https://pypi.org/projects/ocrd) with pip:
+
+```sh
+pip install ocrd
+```
+
+## Generic setup
+
+In this variant, you still need to install the `ocrd` Python package but since
+it's only used for its CLI (and as a depencency for Python-based OCR-D
+software), you can install it system-wide:
+
+```sh
+pip install ocrd
+```
 
 ## From image to transcription
 
