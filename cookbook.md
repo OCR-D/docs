@@ -18,6 +18,11 @@
 	* [Generic setup](#generic-setup)
 	* [Setup from source](#setup-from-source)
 	* [Verify setup](#verify-setup)
+* [Anatomy of an OCR-D module project (MP)](#anatomy-of-an-ocr-d-module-project-mp)
+	* [`ocrd-tool.json`](#ocrd-tooljson)
+	* [`Makefile`](#makefile)
+		* [`Makefile` for python MP](#makefile-for-python-mp)
+		* [`Makefile` for generic MP](#makefile-for-generic-mp)
 * [Working with METS](#working-with-mets)
 	* [Workspace](#workspace)
 		* [Git similarity intended](#git-similarity-intended)
@@ -230,6 +235,20 @@ $ ocrd --version
 # ocrd, version 0.4.0
 ```
 
+## Anatomy of an OCR-D module project (MP)
+
+MP are [git repositories](TODO spec) with at least a description of the MP and
+its provided tools ([`ocrd-tool.json`](#ocrd-tooljson) and a
+[`Makefile`](#makefile) for installing the MP into a [suitable OS](#bootstrapping).
+
+### `ocrd-tool.json`
+
+### `Makefile`
+
+#### `Makefile` for python MP
+
+#### `Makefile` for generic MP
+
 ## Working with METS
 
 METS is the container format of choice for OCR-D because it is widely used in
@@ -440,7 +459,9 @@ $ ocrd workspace -d $WORKSPACE_DIR add -G OCR-D-IMG-BIN -i PAGE-0013-BIN -m imag
 
 ### OCR-D workflow
 
-The workflow consits of several steps from the image with some additional metadata to the textual content of the image. The tools used to generate the text are divided in the following categories:
+The workflow consists of several steps from the image with some additional
+metadata to the textual content of the image. The tools used to generate the
+text are divided in the following categories:
 
 - Image preprocessing
 - Layout analysis
