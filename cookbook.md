@@ -322,8 +322,19 @@ Example:
   "version": "0.0.1",
   "name": "ocrd-blockissifier",
   "synopsis": "Tools for reasoning about how these blocks fit on this here page",
-  "git_url": "https://githbub.com/johndoe/ocrd_blockissifier",
-  "dockerhub": "https://hub.docker.com/r/johndoe/ocrd_blockissifier"
+  "git_url": "https://githbub.com/johndoe/ocrd_blocksifier",
+  "dockerhub": "https://hub.docker.com/r/johndoe/ocrd_blocksifier",
+  "authors": [{
+    "name": "John Doe",
+    "email": "johndoe@ocr-corp.com",
+    "url": "johndoe.github.io"
+  }],
+  "bugs": {
+    "url": "https://github.com/sindresorhus/temp-dir/issues"
+  },
+  "tools": {
+      /* see next section */
+    }
 
 }
 ```
