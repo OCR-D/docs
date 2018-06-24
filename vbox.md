@@ -63,6 +63,9 @@ chsh -s /bin/zsh
 sudo apt install libtesseract{4,-dev} tesseract-ocr{,-eng,-deu}
 ```
 
+Einige Tools benötigen aber für die nahe Zukunft noch Versionen der alten
+`3.0x`-Versionsreihe ohne neuronale Netze und Trainingstools.
+
 ### Python
 
 #### Install virtualenv
