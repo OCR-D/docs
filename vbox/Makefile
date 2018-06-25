@@ -1,3 +1,4 @@
+PREFIX = $(HOME)/.local
 REPODIR = $(HOME)/build
 REPOURL = https://github.com/OCR-D/
 
@@ -5,7 +6,7 @@ REPOURL = https://github.com/OCR-D/
 OCRD_REPOS_PY2 = ocrd_ocropy
 
 # python3 modules. Default: $(OCRD_REPOS_PY3)
-OCRD_REPOS_PY3 = ocrd_kraken ocrd_tesserocr ocrd-train
+OCRD_REPOS_PY3 = ocrd_kraken ocrd_tesserocr ocrd-train ocrd_olena
 
 # OCRD_REPOS_PY3 = $(shell cd $(REPODIR);find  -maxdepth 1 -name 'ocrd*' -not -name 'ocrd_ocropy' -printf '%P\n')
 
@@ -63,4 +64,4 @@ install:
 	fi
 
 $(OCRD_REPOS):
-	-cd $(REPODIR)/$@; make deps install $(FILTER_NOISE)
+	-cd $(REPODIR)/$@; make deps install PREFIX=$(PREFIX)$(FILTER_NOISE)
