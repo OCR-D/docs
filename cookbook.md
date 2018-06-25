@@ -1,5 +1,7 @@
 # OCR-D Cookbook
 
+:fire: TODO :fire: TODOs ausräumen
+
 > A set of recipes for common tasks and solutions for common problems developing and using software within OCR-D.
 
 <!-- BEGIN-MARKDOWN-TOC -->
@@ -20,10 +22,15 @@
 	* [Verify setup](#verify-setup)
 * [Anatomy of an OCR-D module project (MP)](#anatomy-of-an-ocr-d-module-project-mp)
 	* [`ocrd-tool.json`](#ocrd-tooljson)
+		* [Mechanics of the `ocrd-tool.json`](#mechanics-of-the-ocrd-tooljson)
+		* [Metadata about the module project](#metadata-about-the-module-project)
+		* [Metadata about the tools](#metadata-about-the-tools)
 	* [`Makefile`](#makefile)
 		* [`Makefile` for python MP](#makefile-for-python-mp)
 		* [`Makefile` for generic MP](#makefile-for-generic-mp)
-* [Working with METS](#working-with-mets)
+	* [`ocrd-tool` -- Working with ocrd-tool.json](#ocrd-tool----working-with-ocrd-tooljson)
+		* [`ocrd-tool validate`](#ocrd-tool-validate)
+* [`ocrd workspace` - Working with METS](#ocrd-workspace---working-with-mets)
 	* [Workspace](#workspace)
 		* [Git similarity intended](#git-similarity-intended)
 		* [Set the workspace to work on](#set-the-workspace-to-work-on)
@@ -243,13 +250,120 @@ its provided tools ([`ocrd-tool.json`](#ocrd-tooljson) and a
 
 ### `ocrd-tool.json`
 
+This is a JSON file that describes the software of a particular MP. It serves
+mainly three purposes:
+
+  1. providing a machine-actionable description of MP and the bundled tools and
+     their parameters 
+  2. concise human-targeted descriptions as the foundation for the [application
+     documentation](TODO)
+  3. ensuring compatible definitions and interfaces, which is essential for
+     sustainable, scalable workflows
+
+The main focus for the purpose of this document is the first point.
+
+The structure and syntax of the `ocrd-tool.json` is [defined by a JSON
+Schema](https://ocr-d.github.io/ocrd_tool#definition) and exepcts JSON Schema
+for the parameter definitions. In addition to the schema, the `ocrd` command
+line tool can help you [validate the ocrd-tool.json](#validating-ocr-d-tool-json)
+
+#### Mechanics of the `ocrd-tool.json`
+
+:fire: TODO :fire:
+
+> [kba] Wir brauchen einen besseren Namen, ich kann das schon nicht mehr
+> schreiben dauernd, `ocrd-tool.json`. Vielleicht einfach `manifest.json` oder
+> `package.json` oder `tool-desc` odr irgendwas.
+
+:fire: TODO :fire:
+
+The `ocrd-tool.json` has two conceptual levels:
+
+  * [Information about the MP](#information-about-the-mp) as a whole and the
+    people and processes involved
+  * Technical metadata on the [level of the individual tools](#metadata-about-the-tools)
+
+Beyond the `ocrd-tool.json` file, it is part of the requirements that the tools
+can provide the section of the `ocrd-tool.json` about 'themselves' at runtime
+with the [`-J`/`--dump-json` flags](#https://ocr-d.github.io/cli#-j---dump-json).
+
+The reason for this redundancy is to make the tools inspectable at runtime and
+to prevent "feature drift" where the  software evolves to the point where the
+description/documentation is out-of-date with the actual implementation.
+
+From a developer's perspective, the easiest way to handle this is by bundling
+the `ocrd-tool.json` into your software, e.g. by the following pattern:
+
+  1. Store the `ocrd-tool.json` at a location where it is easy to deploy and
+     access [after installation](#makefile)
+  2. Symlink it to the root of the repository: `ln -sr src/ocrd-tool.json .`
+  3. Handle `--dump-json` by parsing the `ocrd-tool.json` and sending out the
+     relevant section
+  4. Validate input and [provide defaults](#ocrd-tool-tool-parse-params) based
+     on the JSON schema mechanics
+
+#### Metadata about the module project
+
+Required properties are bold.
+
+  * **`version`**: Version of the tool, [adhering to Semantic
+    Versioning](https://semver.org/)
+  * **`git_url`**: URL of the Github
+  * **`tool`**: See [next section](#metadata-about-the-tools)
+  * `dockerhub`: The project's [DockerHub](https://hub.docker.com) URL
+  * `creators`: :rotating_light: TODO  :rotating_light::
+  * `insitution`: :rotating_light: TODO  :rotating_light::
+  * `synopsis`: :rotating_light: TODO  :rotating_light::
+
+Example:
+
+```json
+{
+  "version": "0.0.1",
+  "name": "ocrd-blockissifier",
+  "synopsis": "Tools for reasoning about how these blocks fit on this here page",
+  "git_url": "https://githbub.com/johndoe/ocrd_blocksifier",
+  "dockerhub": "https://hub.docker.com/r/johndoe/ocrd_blocksifier",
+  "authors": [{
+    "name": "John Doe",
+    "email": "johndoe@ocr-corp.com",
+    "url": "johndoe.github.io"
+  }],
+  "bugs": {
+    "url": "https://github.com/sindresorhus/temp-dir/issues"
+  },
+  "tools": {
+      /* see next section */
+    }
+
+}
+```
+
+#### Metadata about the tools
+
+:fire: TODO :fire:
+
 ### `Makefile`
+
+:fire: TODO :fire:
 
 #### `Makefile` for python MP
 
+:fire: TODO :fire:
+
 #### `Makefile` for generic MP
 
-## Working with METS
+:fire: TODO :fire:
+
+### `ocrd-tool` -- Working with ocrd-tool.json
+
+:fire: TODO :fire:
+
+#### `ocrd-tool validate`
+
+:fire: TODO :fire:
+
+## `ocrd workspace` - Working with METS
 
 METS is the container format of choice for OCR-D because it is widely used in
 digitzation workflows in cultural heritage institutions.
@@ -275,12 +389,12 @@ The `workspace` command's syntax and mechanics are strongly inspired by
 
 | `git`    | `ocrd workspace`  |
 |----------|-------------------|
-| init     | `init`            |
-| clone    | `clone`           |
-| add      | `add`             |
-| ls-files | `find`            |
-| fetch    | `find --download` |
-| archive  | `pack`            |
+| `init`     | `init`            |
+| `clone`    | `clone`           |
+| `add`      | `add`             |
+| `ls-files` | `find`            |
+| `fetch`    | `find --download` |
+| `archive`  | `pack`            |
 
 #### Set the workspace to work on
 

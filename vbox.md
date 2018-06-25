@@ -63,6 +63,22 @@ chsh -s /bin/zsh
 sudo apt install libtesseract{4,-dev} tesseract-ocr{,-eng,-deu}
 ```
 
+Einige Tools benötigen aber für die nahe Zukunft noch Versionen der alten
+`3.0x`-Versionsreihe ohne neuronale Netze und Trainingstools.
+
+Es sind sowohl die Version `3.05.00` (in `$HOME/.local`) als auch `4.0.0-beta1`
+(systemweit) installiert. 
+
+Um zwischen den beiden Versionen zu wechseln:
+
+```sh
+$ source /home/ocrd/tess4/bin/activate 
+Switched from 'tesseract 4.0.0-beta.1' to 'tesseract 4.0.0-beta.1. TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00
+
+$ source /home/ocrd/tess3/bin/activate
+Switched from 'tesseract 4.0.0-beta.1' to 'tesseract 3.05.02. TESSDATA_PREFIX=/home/ocrd/tess3
+```
+
 ### Python
 
 #### Install virtualenv
