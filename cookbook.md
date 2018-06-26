@@ -406,7 +406,7 @@ directory*. If you want to use a different directory, use the `-d / --directory`
 $ ocrd workspace find
 
 # Listing files in the workspace at $WORKSPACE_DIR
-$ ocrd workspace -d $WORKSPACE_DIR
+$ ocrd workspace -d $WORKSPACE_DIR find
 ```
 
 #### Use another name than `mets.xml`
