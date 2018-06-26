@@ -167,8 +167,8 @@ sudo apt install \
 Create a `virtualenv` in an easy to remember or easy-to-search-shell-history-for location:
 
 ```sh
-$ virtualenv -p 3.6 $HOME/ocrd-venv3
-$ virtualenv -p 2.7 $HOME/ocrd-venv2 # If you require Python2 compat
+$ virtualenv -p python3.6 $HOME/ocrd-venv3
+$ virtualenv -p python2.7 $HOME/ocrd-venv2 # If you require Python2 compat
 ```
 
 #### Activate virtualenv
