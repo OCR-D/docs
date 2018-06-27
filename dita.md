@@ -191,7 +191,7 @@ PUBLIC "-//OASIS//DTD DITA Glossary Group//EN" "glossgroup.dtd">
         </glossdef>
     </glossentry>
     <glossentry id="gt">
-        <glossterm>Grounfd Truth</glossterm>
+        <glossterm>Ground Truth</glossterm>
         <glossdef>Ground truth (GT) in the context of OCR-D are
         transcriptions, specific structure descriptions and word lists.
         These are essentially available in PAGE XML format in
@@ -209,7 +209,7 @@ PUBLIC "-//OASIS//DTD DITA Glossary Group//EN" "glossgroup.dtd">
 <!DOCTYPE glossentry 
 PUBLIC "-//OASIS//DTD DITA Glossary//EN" "glossary.dtd">
 <glossentry id="gt">
-    <glossterm>Grounfd Truth</glossterm>
+    <glossterm>Ground Truth</glossterm>
     <glossdef>Ground truth (GT) in the context of OCR-D are
     transcriptions, specific structure descriptions and word lists.
     These are essentially available in PAGE XML format in combination
