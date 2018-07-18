@@ -387,8 +387,8 @@ workspaces and therefore METS files.
 The `workspace` command's syntax and mechanics are strongly inspired by
 [`git`]() so if you know `git`, this should be familiar.
 
-| `git`    | `ocrd workspace`  |
-|----------|-------------------|
+| `git`      | `ocrd workspace`  |
+|------------|-------------------|
 | `init`     | `init`            |
 | `clone`    | `clone`           |
 | `add`      | `add`             |
@@ -500,7 +500,7 @@ $WORKSPACE_DIR
 $WORKSPACE_DIR/mets.xml
 
 # Download all files in the `OCR-D-IMG` file group
-$ ocrd workspace -d $WORKSPACE_DIR find --file-grp OCR-D-IMG
+$ ocrd workspace -d $WORKSPACE_DIR find --file-grp OCR-D-IMG --download
 [...]
 
 $ find $WORKSPACE_DIR
@@ -567,6 +567,22 @@ $ ocrd workspace -d $WORKSPACE_DIR add -G OCR-D-IMG-BIN -i PAGE-0013-BIN -m imag
 # Validate again
 <report valid="true">
 </report>
+```
+
+## ocrd-kraken
+
+### Clone a workspace
+
+```
+$ ocrd workspace clone --download 'https://github.com/OCR-D/assets/raw/master/data/column-samples/mets.xml' ws1
+```
+
+### Binarize all images
+
+We'll reuse the downloaded workspace `ws1`:
+
+```
+$ ocrd-kraken-binarize -w ws1 -m ws1/mets.xml
 ```
 
 ## From image to transcription
