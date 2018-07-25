@@ -167,8 +167,8 @@ sudo apt install \
 Create a `virtualenv` in an easy to remember or easy-to-search-shell-history-for location:
 
 ```sh
-$ virtualenv -p 3.6 $HOME/ocrd-venv3
-$ virtualenv -p 2.7 $HOME/ocrd-venv2 # If you require Python2 compat
+$ virtualenv -p python3.6 $HOME/ocrd-venv3
+$ virtualenv -p python2.7 $HOME/ocrd-venv2 # If you require Python2 compat
 ```
 
 #### Activate virtualenv
@@ -312,7 +312,7 @@ Required properties are bold.
   * **`tool`**: See [next section](#metadata-about-the-tools)
   * `dockerhub`: The project's [DockerHub](https://hub.docker.com) URL
   * `creators`: :rotating_light: TODO  :rotating_light::
-  * `insitution`: :rotating_light: TODO  :rotating_light::
+  * `institution`: :rotating_light: TODO  :rotating_light::
   * `synopsis`: :rotating_light: TODO  :rotating_light::
 
 Example:
@@ -406,7 +406,7 @@ directory*. If you want to use a different directory, use the `-d / --directory`
 $ ocrd workspace find
 
 # Listing files in the workspace at $WORKSPACE_DIR
-$ ocrd workspace -d $WORKSPACE_DIR
+$ ocrd workspace -d $WORKSPACE_DIR find
 ```
 
 #### Use another name than `mets.xml`
@@ -818,7 +818,7 @@ file:///home/ocrd/projects/OCR-D/workshop/2018_06_26/workspaces/selectOneImage/O
 § ocrd workspace find --output-field groupId
 OCR-D-IMG_0001
 OCR-D-IMG_0002
-Step 2b: Binarize image from a choosen GROUPID
+Step 2b: Binarize image from a chosen GROUPID
 $ ocrd-kraken-binarize --input-file-grp OCR-D-IMG --output-file-grp OCR-D-IMG-KRAKEN-BIN --group-id OCR-D-IMG_0001 --working-dir ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeSelectedImage --mets mets.xml
 # Check result
 $ firefox ~/projects/OCR-D/workshop/2018_06_26/workspaces/binarizeSelectedImage/OCR-D-IMG-KRAKEN-BIN/OCR-D-IMG-KRAKEN-BIN_0001.bin.png

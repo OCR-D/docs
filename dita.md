@@ -6,7 +6,7 @@
 Das OCR-D: Anforderungsprofil für die Dokumentation der Modul Projekte stellt nicht eine DITA-Einführung oder DITA-Dokumentation dar, das gleiche betrifft die Markdown Auszeichnungssprache. In dieser Dokumentation werden ergänzende Informationen sowie unmittelbare Anforderungen für eine OCR-D konforme Dokumentation dargelegt. 
 
 **Adressaten der Dokumentation:**
-Es sollen sowohl Techniker, die vorallem Informationen zur **Anwendung** benötigen (Installation, Wartung sowie Integration im Umfeld der eigenen Werkzeuge), als auch **Benutzer**, die das Werkzeug nutzen möchten bzw. mit der Anwendung ein bestimmtes Ergebnis erzielen möchten im Rahmen der *Anwendungsdokumentation* und *Benutzerdokumentation* informiert werden. 
+Es sollen sowohl Techniker, die vor allem Informationen zur **Anwendung** benötigen (Installation, Wartung sowie Integration im Umfeld der eigenen Werkzeuge), als auch **Benutzer**, die das Werkzeug nutzen möchten bzw. mit der Anwendung ein bestimmtes Ergebnis erzielen möchten im Rahmen der *Anwendungsdokumentation* und *Benutzerdokumentation* informiert werden. 
 
 
 **Stil:** Der Stil der Dokumentation sollte verständlich und in kurzen Sätzen abgefasst sein. Die Dokumentation muss alle Aspekte der Anwendung und Benutzung umfassend beinhalten.
@@ -191,7 +191,7 @@ PUBLIC "-//OASIS//DTD DITA Glossary Group//EN" "glossgroup.dtd">
         </glossdef>
     </glossentry>
     <glossentry id="gt">
-        <glossterm>Grounfd Truth</glossterm>
+        <glossterm>Ground Truth</glossterm>
         <glossdef>Ground truth (GT) in the context of OCR-D are
         transcriptions, specific structure descriptions and word lists.
         These are essentially available in PAGE XML format in
@@ -209,7 +209,7 @@ PUBLIC "-//OASIS//DTD DITA Glossary Group//EN" "glossgroup.dtd">
 <!DOCTYPE glossentry 
 PUBLIC "-//OASIS//DTD DITA Glossary//EN" "glossary.dtd">
 <glossentry id="gt">
-    <glossterm>Grounfd Truth</glossterm>
+    <glossterm>Ground Truth</glossterm>
     <glossdef>Ground truth (GT) in the context of OCR-D are
     transcriptions, specific structure descriptions and word lists.
     These are essentially available in PAGE XML format in combination
@@ -302,5 +302,6 @@ Die Dokumentation liegt unter dem xmlbasierten Format DITA [http://docs.oasis-op
 
 
 <!--### Speicherung der Dokumentation-->
+
 
 
