@@ -309,13 +309,24 @@ All MP should provide a [Makefile](https://en.wikipedia.org/wiki/Makefile) with 
 
 `make test` should start the unit/regression test suite if provided.
 
-#### `Makefile` for python MP
+#### `Makefile` for Python MP
 
-:fire: TODO :fire:
+`make deps` should install dependencies with `pip`.
+
+`make install` should call `python setup.py install`.
+
+See the [makefile of the `ocrd_kraken` project](https://github.com/OCR-D/ocrd_kraken/blob/master/Makefile) for an example.
 
 #### `Makefile` for generic MP
 
-:fire: TODO :fire:
+`make deps` should install dependencies either by compiling from source or using `apt-get`.
+
+`make install` should
+
+  * Copy the executables to `$(PREFIX)/bin`, creating `$(PREFIX)/bin` if necessary.
+  * Copy any required files to `$(PREFIX)/share/<name-of-the-package>`, creating the latter if necessary
+
+See the [makefile of the `ocrd_olena` project](https://github.com/OCR-D/ocrd_olena/blob/master/Makefile) for an example.
 
 ### `ocrd-tool` -- Working with ocrd-tool.json
 
@@ -333,7 +344,7 @@ digitzation workflows in cultural heritage institutions.
 A METS file references files in file groups and can contain a variety of
 metadata, the details can [be found in the specs](https://ocr-d.github.io).
 
-### Workspace
+### From METS to Workspace
 
 Within the OCR-D toolkit, we use the term "workspace", a folder containing a
 file `mets.xml` and any number of the files referenced by the METS.
