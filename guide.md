@@ -328,14 +328,6 @@ See the [makefile of the `ocrd_kraken` project](https://github.com/OCR-D/ocrd_kr
 
 See the [makefile of the `ocrd_olena` project](https://github.com/OCR-D/ocrd_olena/blob/master/Makefile) for an example.
 
-### `ocrd-tool` -- Working with ocrd-tool.json
-
-:fire: TODO :fire:
-
-#### `ocrd-tool validate`
-
-:fire: TODO :fire:
-
 ## `ocrd workspace` - Working with METS
 
 METS is the container format of choice for OCR-D because it is widely used in
@@ -538,6 +530,39 @@ $ ocrd workspace -d $WORKSPACE_DIR set-id 'scheme://my/identifier/syntax/kant_au
 $ ocrd workspace -d $WORKSPACE_DIR add -G OCR-D-IMG-BIN -i PAGE-0013-BIN -m image/png -g PAGE-0013 page0013binarized.png
 
 # Validate again
+<report valid="true">
+</report>
+```
+
+## `ocrd-tool` -- Working with ocrd-tool.json
+
+This command helps you explore and validate the information in any [ocrd-tool.json](#ocrd-tool-json).
+
+The syntax is `ocrd ocrd-tool /path/to/ocrd-tool.json SUBCOMMAND`
+
+### `ocrd-tool validate`
+
+Validate that an `ocrd-tool.json` is syntactically valid and adheres to the [schema](/ocrd_tool).
+
+Useful while developing to make sure there are no typos and all required properties are set.
+
+```sh
+$ ocrd validate /path/to/ocrd_wip/ocrd-tool.json validate
+<report valid="false">
+  <error>[tools.ocrd-wip] 'steps' is a required property</error>
+  <error>[tools.ocrd-wip] 'categories' is a required property</error>
+  <error>[] 'version' is a required property</error>
+</report>
+```
+
+This shows that the `ocrd-wip` executable is missing the required `steps` and
+`categories` properties and the root level object is missing the `version`
+property.
+
+Adding them should result in
+
+```sh
+$ ocrd validate /path/to/ocrd_wip/ocrd-tool.json validate
 <report valid="true">
 </report>
 ```
