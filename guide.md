@@ -547,22 +547,104 @@ Validate that an `ocrd-tool.json` is syntactically valid and adheres to the [sch
 Useful while developing to make sure there are no typos and all required properties are set.
 
 ```sh
-$ ocrd validate /path/to/ocrd_wip/ocrd-tool.json validate
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json validate
 <report valid="false">
-  <error>[tools.ocrd-wip] 'steps' is a required property</error>
-  <error>[tools.ocrd-wip] 'categories' is a required property</error>
+  <error>[tools.ocrd-wip-xyzzy] 'steps' is a required property</error>
+  <error>[tools.ocrd-wip-xyzzy] 'categories' is a required property</error>
   <error>[] 'version' is a required property</error>
 </report>
 ```
 
-This shows that the `ocrd-wip` executable is missing the required `steps` and
+This shows that the `ocrd-wip-xyzzy` executable is missing the required `steps` and
 `categories` properties and the root level object is missing the `version`
 property.
 
 Adding them should result in
 
 ```sh
-$ ocrd validate /path/to/ocrd_wip/ocrd-tool.json validate
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json validate
 <report valid="true">
 </report>
+```
+
+### Introspect an `ocrd-tool.json`
+
+These commands are used for enumerating the executables contained in an
+`ocrd-tool.json` and get root level metadata, such as the version.
+
+```sh
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json version
+0.0.1
+
+# Lists all the tools (executables) one per-line
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json list-tools
+ocrd-wip-xyzzy
+ocrd-wip-frobozz
+```
+
+### Introspect individual tools
+
+This set of commands allows introspection of the metadata about individual
+tools within an `ocrd-tool.json`.
+
+The syntax is `ocrd ocrd-tool /path/to/ocrd-tool.json tool EXECUTABLE SUBCOMMAND`
+
+```sh
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json tool ocrd-wip-xyzzy --help
+
+  categories    Categories of tool
+  description   Describe tool
+  dump          Dump JSON of tool
+  steps         Steps of tool
+
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json tool ocrd-wip-xyzzy dump
+{
+  "description": "Nothing happens",
+  "categories": ["Text recognition and optimization", "Arcane Magic"],
+  "steps": ["recognition/text-recognition"],
+  "exceutable": "ocrd-wip-xyzzy"
+}
+
+# Description
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json tool ocrd-wip-xyzzy description
+Nothing happens
+
+# List categories one per line
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json tool ocrd-wip-xyzzy categories
+Text recognition and optimization
+Arcane Magic
+
+# List steps one per line
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json tool ocrd-wip-xyzzy steps
+recognition/text-recognition
+```
+
+### Parse parameters
+
+The details of how a tool is configured at run-time are determined by
+parameters. When a parameter file is passed to a
+tool, it should:
+
+  * ensure it is valid JSON
+  * valid according to the [parameter schema](#metadata-about-parameters)
+  * add default values when no explicit values were provided
+
+The `ocrd ocrd-tool tool parse-params` command does just that and can output
+the resulting default-enriched parameter as either JSON or as shell script
+assignments to evaluate:
+
+```sh
+# Get JSON
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json tool ocrd-wip-xyzzy parse-params --json -p <(echo '{"val1": 42, "val2": false}')
+{
+  "val1": 42,
+  "val2": false,
+  "val-with-default": 23
+}
+
+# Get back shell assignments to an associative array "params"
+$ ocrd ocrd-tool /path/to/ocrd_wip/ocrd-tool.json tool ocrd-wip-xyzzy parse-params -p <(echo '{"val1": 42, "val2": false}')
+params["val1"]="42"
+params["val2"]="true"
+params["val-with-default"]="23"
 ```
