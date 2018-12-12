@@ -1,0 +1,6 @@
+#!/bin/zsh
+sha512sum data/**/*(.) >! manifest-sha512.txt 
+sha512sum manifest-sha512.txt bagit.txt bag-info.txt >! tagmanifest-sha512.txt
+file_no=$(du -bs data/**/*(.)|wc -l)
+oxum=$(du -bs data/**/*(.)|awk '{s+=$1} END {print s}')
+sed -i "s/^ *Payload-Oxum:.*/Payload-Oxum: $oxum.$file_no/" bag-info.txt
