@@ -13,6 +13,12 @@ mets_path="$(realpath "$mets_path")"
 mets_dir="$(dirname "$mets_path")"
 cd "$mets_dir"
 
+replace_filegroups () {
+    echo "# Normalizing fileGrp USE"
+    sed -i 's,fulltext FR,OCR-D-SEG-ZOT,' "$mets_path"
+    sed -i 's,master image,OCR-D-IMG,' "$mets_path"
+}
+
 replace_xml_jpg_xml () {
     echo "# Replace '*.xml' with '*.jpg.xml' in $mets_path"
     sed -i 's/\/\([0-9]*\)\.xml"/\/\1.jpg.xml"/' $mets_path
@@ -64,6 +70,7 @@ prune_files () {
 }
 
 
+replace_filegroups
 replace_tif_jpg
 replace_xml_jpg_xml
 rename_xlink_href
