@@ -19,6 +19,7 @@ from ocrd.decorators import ocrd_loglevel
 from pathlib import Path
 
 from ocrd import Workspace, Resolver
+from ocrd_validators import WorkspaceValidator, OcrdZipValidator
 from ocrd_utils import (
     getLogger,
     pushd_popd,
@@ -99,12 +100,11 @@ def update_one(bagdir, non_local_urls):
     """
     do_the_update(bagdir, non_local_urls=non_local_urls)
 
-@cli.command('many')
-@click.option('-L', '--non-local-urls', help="Don't skip non-local files", is_flag=True, default=False)
+@cli.command('many-validate')
 @click.argument('bagsdir', type=click.Path(dir_okay=True, writable=True, readable=False, resolve_path=True), required=True)
 def update_many(bagsdir, non_local_urls):
     """
-    Update many OCR-D bags at once
+    Validate the bagit and workspace compliancy of GT.
 
     BAGSDIR must contain only directories thaty contain unserialized OCRD-ZIP
     """
@@ -117,6 +117,44 @@ def update_many(bagsdir, non_local_urls):
         LOG.info(">>>>> OCR-D-ZIP [%05d / %05d] %s", cur, total, bagdir)
         do_the_update(bagdir, non_local_urls=non_local_urls)
         cur += 1
+
+@cli.command('validate-many')
+@click.option('--report-dir', help="Folder to write validation reports to", default=Path.cwd() / 'reports')
+@click.argument('bagsdir', type=click.Path(dir_okay=True, writable=True, readable=False, resolve_path=True), required=True)
+def validate_many(bagsdir, report_dir):
+    """
+    Update many OCR-D bags at once
+
+    BAGSDIR must contain only directories thaty contain unserialized OCRD-ZIP
+    """
+    # yes, that is bagsdir, bagdirs and bagdir. Deal with it 😎 🆒
+    bagsdir = Path(bagsdir)
+    bagdirs = [x for x in bagsdir.iterdir() if x.is_dir() and not x.name.startswith('.')]
+    total = len(bagdirs)
+    cur = 0
+
+    report_dir = Path(report_dir)
+    report_dir.mkdir(parents=True, exist_ok=True)
+    for bagdir in bagdirs:
+        directory = Path(bagdir, 'data')
+        cur += 1
+        LOG.info(">>>>> OCR-D-ZIP [%05d / %05d] %s", cur, total, bagdir.name)
+        report = WorkspaceValidator.validate(
+            resolver,
+            str(Path(directory, 'mets.xml')),
+            src_dir=directory,
+            skip=[],
+            download=False,
+            page_strictness='lax'
+        )
+        Path(report_dir, '%s.workspace.txt' % bagdir.name).write_text(report.to_xml())
+
+        try:
+            report = OcrdZipValidator(resolver, str(bagdir)).validate(skip_unzip=True)
+            Path(report_dir, '%s.ocrd-zip.txt' % bagdir.name).write_text(report.to_xml())
+        except Exception as e:
+            Path(report_dir, '%s.ocrd-zip.txt' % bagdir.name).write_text(str(e))
+
 
 if __name__ == '__main__':
     cli()
