@@ -21,13 +21,13 @@ replace_filegroups () {
 
 replace_xml_jpg_xml () {
     echo "# Replace '*.xml' with '*.jpg.xml' in $mets_path"
-    sed -i 's/\/\([0-9]*\)\.xml"/\/\1.jpg.xml"/' $mets_path
+    sed -i 's/\/\([0-9]*\)\.xml"/\/\1.jpg.xml"/g' $mets_path
 }
 
 replace_tif_jpg () {
     echo "# Replace '*.tif' with '*.jpg' in $mets_path"
-    sed -i 's/\.tif"/.jpg"/' $mets_path
-    sed -i 's,image/tiff,image/jpeg,' $mets_path
+    sed -i 's/\.tif"/.jpg"/g' $mets_path
+    sed -i 's,image/tiff,image/jpeg,g' $mets_path
 }
 
 rename_xlink_href () {
@@ -38,7 +38,7 @@ rename_xlink_href () {
         while read cand;do
             local subdir="${cand%/*}"
             local basename="${cand##*/}"
-            # echo find "$mets_dir" -name "$basename"
+            echo find "$mets_dir" -name "$basename"
             local actual_path="$(find -name "$basename")"
             actual_path="${actual_path#./}"
             printf "\"$cand\":\"$actual_path\"\n" >> "$replacement_file"
@@ -72,6 +72,6 @@ prune_files () {
 
 replace_filegroups
 replace_tif_jpg
-replace_xml_jpg_xml
+# replace_xml_jpg_xml
 rename_xlink_href
 prune_files
