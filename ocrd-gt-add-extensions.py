@@ -104,7 +104,7 @@ def update_one(bagdir, non_local_urls):
 @click.argument('bagsdir', type=click.Path(dir_okay=True, writable=True, readable=False, resolve_path=True), required=True)
 def update_many(bagsdir, non_local_urls):
     """
-    Validate the bagit and workspace compliancy of GT.
+    Validate the bagit and workspace compliance of GT.
 
     BAGSDIR must contain only directories thaty contain unserialized OCRD-ZIP
     """
