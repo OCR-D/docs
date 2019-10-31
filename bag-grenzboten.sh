@@ -65,7 +65,7 @@ s|\(.*\)\n\(.*\)|s/\1/\2/g|
 }
 
 prune_files () {
-    echo "# Removing non-existant files from $mets_path"
+    echo "# Removing non-existent files from $mets_path"
     ocrd workspace prune-files
 }
 
