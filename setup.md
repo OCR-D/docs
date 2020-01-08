@@ -386,3 +386,28 @@ ocrd process \
   'tesserocr-recognize -I OCR-D-SEG-LINE -O OCR-D-OCR-TESSEROCR -p param-tess-fraktur.json' 
 ```
 
+### With ocrd/all:maximum docker image
+
+First, make sure docker is installed and set up.
+
+Pull the ocrd/all:maximum docker image from Docker Hub
+
+```sh
+docker pull ocrd/all:maximum
+```
+
+Create parameter file:
+
+```sh
+echo '{ "model": "Fraktur" }' > param-tess-fraktur.json
+```
+
+Run the workflow with a new docker container (that we delete after execution):
+
+```sh
+docker run -u $(id -u) -v $PWD:/data -w /data -- ocrd/all:maximum ocrd process \
+  'cis-ocropy-binarize -I OCR-D-IMG -O OCR-D-SEG-PAGE' \
+  'tesserocr-segment-region -I OCR-D-SEG-PAGE -O OCR-D-SEG-BLOCK' \
+  'tesserocr-segment-line -I OCR-D-SEG-BLOCK -O OCR-D-SEG-LINE' \
+  'tesserocr-recognize -I OCR-D-SEG-LINE -O OCR-D-OCR-TESSEROCR -p param-tess-fraktur.json' 
+```
