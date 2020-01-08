@@ -340,9 +340,9 @@ docker run -u $(id -u) -w /data -v $PWD:/data -- ocrd/all:maximum ocrd-tesserocr
 
 Note that the CLI is exactly the same, the only difference is the prefix to instruct Docker, as [explained above](#mini-medi-maxi)
 
-## Running a small workflow
+### Running a small workflow
 
-### With PyPI and workflow engine from core
+#### With PyPI and workflow engine from core
 
 The [core package](https://github.com/OCR-D/core) will be installed with every
 OCR-D module package, but you can also install it manually:
@@ -386,7 +386,7 @@ ocrd process \
   'tesserocr-recognize -I OCR-D-SEG-LINE -O OCR-D-OCR-TESSEROCR -p param-tess-fraktur.json' 
 ```
 
-### With ocrd/all:maximum docker image
+#### With ocrd/all:maximum docker image
 
 First, make sure docker is installed and set up.
 
