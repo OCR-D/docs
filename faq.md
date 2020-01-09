@@ -12,7 +12,7 @@
 
 ### What is the difference between OCR-D and Tesseract?
 
-### What is the difference between OCR-D and TRANSKIBUS?
+### What is the difference between OCR-D and TRANSKRIBUS?
 
 ### What is the difference between OCR-D and ocrd4all?
 
