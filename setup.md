@@ -85,7 +85,7 @@ docker pull ocrd/all:maximum
 
 Replace `maximum` accordingly if you want the `minimum` or `medium` variant.
 
-If you do not specify a version, it chooses `latest` which is equivalent to `medium`.
+If no specific version is chosen, `latest` is selected by default, which is equivalent to `medium`.
 
 ### Updating docker image
 
