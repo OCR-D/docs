@@ -18,7 +18,11 @@
 
 ### Is OCR-D production-ready?
 
+### Which formats are supported by OCR-D?
+
 ### How much does it cost to deploy OCR-D?
+
+### What are the system requirements for OCR-D-software?
 
 ## CLI
 
@@ -35,6 +39,8 @@ ocrd workspace add --help
 ```
 
 ### How can I specify parameters on the command line?
+
+### How do I specify multiple input/output file groups?
 
 ### How to configure logging?
 
