@@ -85,6 +85,8 @@ docker pull ocrd/all:maximum
 
 Replace `maximum` accordingly if you want the `minimum` or `medium` variant.
 
+If you do not specify a version, it chooses `latest` which is equivalent to `medium`.
+
 ### Updating docker image
 
 To update the docker images to their latest version, just run the `docker pull` command again:
@@ -170,8 +172,7 @@ regularly update the repository and its submodules:
 
 ```sh
 git pull
-git submodule sync
-git submodule update --init --recursive
+make modules
 ```
 
 ### Installing with ocrd_all
@@ -385,4 +386,3 @@ ocrd process \
   'tesserocr-segment-line -I OCR-D-SEG-BLOCK -O OCR-D-SEG-LINE' \
   'tesserocr-recognize -I OCR-D-SEG-LINE -O OCR-D-OCR-TESSEROCR -p param-tess-fraktur.json' 
 ```
-
