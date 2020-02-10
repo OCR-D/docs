@@ -11,11 +11,12 @@ use all of them.
 
 ## Installation
 
-There are three ways to install OCR-D modules:
+There are four ways to install OCR-D modules:
 
   1. Using the [`ocrd/all` Docker module collection](https://hub.docker.com/r/ocrd/all) (**recommended**)
   2. Using `ocrd/all` to install OCR-D modules locally
   3. Installing modules indivudally via Docker or natively (not recommended)
+  4. Using [OCR-D Framework with Docker](https://github.com/VolkerHartmann/ocrd_framework) to install all available processors, taverna workflow and local research data repository
 
 We recommend using the Docker image since this does not require any changes to
 the host system besides [installing Docker](https://hub.docker.com/r/ocrd/all).
@@ -340,6 +341,52 @@ docker run -u $(id -u) -w /data -v $PWD:/data -- ocrd/all:maximum ocrd-tesserocr
 
 Note that the CLI is exactly the same, the only difference is the prefix to instruct Docker, as [explained above](#mini-medi-maxi)
 
+## Running a small workflow without taverna 
+
+### With PyPI and workflow engine from core
+
+The [core package](https://github.com/OCR-D/core) will be installed with every
+OCR-D module package, but you can also install it manually:
+
+```sh
+pip3 install ocrd
+```
+
+Its CLI `ocrd` contains a simple workflow engine, available with the `ocrd process` command, which allows you to chain multiple OCR-D processor calls into simple sequential workflows.
+
+For example, let's combine the ocropy-based binarization of the
+[ocrd_cis](https://github.com/cisocrgroup/ocrd_cis) module project with the segmentation and recognition
+in [ocrd_tesserocr](https://github.com/OCR-D/ocrd_tesserocr).
+
+First, install ocrd_cis, too:
+
+```sh
+# Install ocrd_cis
+pip3 install ocrd_cis # with pip
+```
+
+Next, install a suitable OCR model for Tesseract:
+
+```sh
+# Install OCR model into Tesseract datapath
+sudo apt-get install tesseract-ocr-script-frak
+```
+
+Now we can define the workflow (as a list of processor calls in abbreviated
+form, and a number of parameter files where defaults are insufficient):
+
+```sh
+# Create parameter files
+echo '{ "model": "Fraktur" }' > param-tess-fraktur.json
+
+# Run workflow
+ocrd process \
+  'cis-ocropy-binarize -I OCR-D-IMG -O OCR-D-SEG-PAGE' \
+  'tesserocr-segment-region -I OCR-D-SEG-PAGE -O OCR-D-SEG-BLOCK' \
+  'tesserocr-segment-line -I OCR-D-SEG-BLOCK -O OCR-D-SEG-LINE' \
+  'tesserocr-recognize -I OCR-D-SEG-LINE -O OCR-D-OCR-TESSEROCR -p param-tess-fraktur.json' 
+```
+
 ## Installation of OCR-D Research Data Repository
 
 It's highly recommended to install the research data repository via Docker. [See link for further information](https://github.com/OCR-D/repository_metastore/blob/master/installDocker/installation.md)
@@ -379,7 +426,7 @@ You may also try this URL in a browser. (http://localhost:8080/api/v1/metastore/
 
 ## Installation Taverna Workflow
 ### Why using Taverna?
-Taverna creates a 'metadata' sub directory containing collected output of all processors. All intermediate mets files and a provenance file containing all provenance of the workflow including start/end time of processor/workflow, used input group(s), used parameters and created output group(s).
+Taverna creates a 'metadata' sub directory containing collected output of all processors. It includes all intermediate mets files and a provenance file containing all provenance of the workflow including start/end time of processor/workflow, used input group(s), used parameters and created output group(s).
 
 There are two ways to install taverna workflow.
 1 'Local' installation
@@ -448,58 +495,14 @@ OCR-D-SEG-LINE
 OCR-D-SEG-REGION
 ```
 Each sub folder starting with 'OCR-D-OCR' should now contain 4 files with the detected full text.
-## Running a small workflow without taverna 
 
-### With PyPI and workflow engine from core
-
-The [core package](https://github.com/OCR-D/core) will be installed with every
-OCR-D module package, but you can also install it manually:
-
-```sh
-pip3 install ocrd
-```
-
-Its CLI `ocrd` contains a simple workflow engine, available with the `ocrd process` command, which allows you to chain multiple OCR-D processor calls into simple sequential workflows.
-
-For example, let's combine the ocropy-based binarization of the
-[ocrd_cis](https://github.com/cisocrgroup/ocrd_cis) module project with the segmentation and recognition
-in [ocrd_tesserocr](https://github.com/OCR-D/ocrd_tesserocr).
-
-First, install ocrd_cis, too:
-
-```sh
-# Install ocrd_cis
-pip3 install ocrd_cis # with pip
-```
-
-Next, install a suitable OCR model for Tesseract:
-
-```sh
-# Install OCR model into Tesseract datapath
-sudo apt-get install tesseract-ocr-script-frak
-```
-
-Now we can define the workflow (as a list of processor calls in abbreviated
-form, and a number of parameter files where defaults are insufficient):
-
-```sh
-# Create parameter files
-echo '{ "model": "Fraktur" }' > param-tess-fraktur.json
-
-# Run workflow
-ocrd process \
-  'cis-ocropy-binarize -I OCR-D-IMG -O OCR-D-SEG-PAGE' \
-  'tesserocr-segment-region -I OCR-D-SEG-PAGE -O OCR-D-SEG-BLOCK' \
-  'tesserocr-segment-line -I OCR-D-SEG-BLOCK -O OCR-D-SEG-LINE' \
-  'tesserocr-recognize -I OCR-D-SEG-LINE -O OCR-D-OCR-TESSEROCR -p param-tess-fraktur.json' 
-```
 ## Installation of the whole OCR-D Framework
-To install the complete OCR-D framework docker is highly recommended.
+To install the complete OCR-D framework containing all available processors, taverna workflow and local research data repository docker is highly recommended.
 ```sh
 wget https://github.com/VolkerHartmann/ocrd_framework/blob/master/install_OCR-D_framework.sh
 bash install_OCR-D_framework.sh ~/ocrd_framework
 ```
-Now there exists several folders
+Now there exist several folders
 
 - repository - Contains all files of repository and the databases
 - taverna - Contains all files workspaces and configuration of workflows
