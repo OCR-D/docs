@@ -1,7 +1,5 @@
-# OCR-D developer documentation
+# OCR-D/docs
 
-  * [Guide to OCR-D via command line](guide)
-  * [Cookbook](cookbook)
-  * [Frequently Asked Questions](faq)
-  * [Meta-Documentation on using DITA](dita)
-  * [Recipe for setting up the developer Virtualbox](vbox)
+**This repo is no longer maintained**
+
+Please see the documentation at the [official OCR-D website](https://ocr-d.de)
